@@ -1,0 +1,769 @@
+/* Choghadiya Generator Styles */
+
+/* Reset and Base Styles */
+.jyotisham-choghadiya-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+/* Header */
+.jyotisham-choghadiya-header {
+    text-align: center;
+    padding: 32px 0;
+}
+
+.jyotisham-choghadiya-header h1 {
+    color: #1a202c;
+    font-size: 2.75rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+.jyotisham-choghadiya-header p {
+    color: #4a5568;
+    font-size: 1.125rem;
+    font-weight: 400;
+}
+
+/* Form Styles */
+.jyotisham-choghadiya-form-container {
+    background: #ffffff;
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 32px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.jyotisham-choghadiya-form-group {
+    margin-bottom: 24px;
+}
+
+.jyotisham-choghadiya-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.jyotisham-choghadiya-form-group input,
+.jyotisham-choghadiya-form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    background: #ffffff;
+    color: #374151;
+    box-sizing: border-box;
+    max-width: 100%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.jyotisham-choghadiya-form-group input:focus,
+.jyotisham-choghadiya-form-group select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Custom dropdown arrow for select */
+.jyotisham-choghadiya-form-group select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+    height: auto !important; 
+}
+
+.jyotisham-choghadiya-generate-btn {
+    width: 100%;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.jyotisham-choghadiya-generate-btn:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Loading */
+.jyotisham-choghadiya-loading {
+    text-align: center;
+    padding: 48px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    margin: 0 auto;
+    max-width: 900px;
+}
+
+.jyotisham-choghadiya-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f1f5f9;
+    border-top: 3px solid #3b82f6;
+    border-radius: 50%;
+    animation: jyotisham-choghadiya-spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes jyotisham-choghadiya-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Results */
+.jyotisham-choghadiya-results {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    width: 100%;
+    max-width: 900px !important;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+/* Choghadiya Content */
+
+
+/* Content Cards */
+.jyotisham-choghadiya-content {
+    display: grid;
+    /* gap: 24px; */
+}
+
+.jyotisham-choghadiya-card {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+}
+
+.jyotisham-choghadiya-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.jyotisham-choghadiya-card h3 {
+    color: #1a202c;
+    margin-bottom: 16px;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.jyotisham-choghadiya-card p {
+    color: #4a5568;
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.jyotisham-choghadiya-card .value {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+/* Choghadiya Type Styles */
+.jyotisham-choghadiya-auspicious {
+    background-color: #f0fdf4 !important;
+    border-left: 4px solid #22c55e !important;
+}
+
+.jyotisham-choghadiya-inauspicious {
+    background-color: #fef2f2 !important;
+    border-left: 4px solid #ef4444 !important;
+}
+
+.jyotisham-choghadiya-good {
+    background-color: #fefce8 !important;
+    border-left: 4px solid #eab308 !important;
+}
+
+.jyotisham-choghadiya-neutral {
+    background-color: #f8fafc !important;
+    border-left: 4px solid #64748b !important;
+}
+
+/* Table Container */
+.jyotisham-choghadiya-table-container {
+    width: 100%;
+    margin-top: 16px;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e0 #f7fafc;
+}
+
+.jyotisham-choghadiya-table-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.jyotisham-choghadiya-table-container::-webkit-scrollbar-track {
+    background: #f7fafc;
+    border-radius: 4px;
+}
+
+.jyotisham-choghadiya-table-container::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 4px;
+}
+
+.jyotisham-choghadiya-table-container::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+}
+
+/* Data Tables */
+.jyotisham-choghadiya-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+.jyotisham-choghadiya-data-table th,
+.jyotisham-choghadiya-data-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+    min-width: 120px;
+}
+
+.jyotisham-choghadiya-data-table th {
+    background: #f8fafc;
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.jyotisham-choghadiya-data-table tr:hover {
+    background: #f8fafc;
+}
+
+.jyotisham-choghadiya-data-table td {
+    color: #4a5568;
+}
+
+/* Error and Warning Display */
+.jyotisham-choghadiya-error {
+    border-left: 4px solid #ef4444;
+    background: #fef2f2;
+}
+
+.jyotisham-choghadiya-warning {
+    border-left: 4px solid #f59e0b;
+    background: #fffbeb;
+}
+
+.jyotisham-choghadiya-error-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+}
+
+.jyotisham-choghadiya-error-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    margin-top: 4px;
+}
+
+.jyotisham-choghadiya-error-message {
+    flex: 1;
+}
+
+.jyotisham-choghadiya-error-message h3,
+.jyotisham-choghadiya-error-message h4 {
+    margin: 0 0 8px 0;
+    color: #374151;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.jyotisham-choghadiya-error-message p {
+    margin: 0 0 16px 0;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+.jyotisham-choghadiya-error-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.jyotisham-choghadiya-retry-btn,
+.jyotisham-choghadiya-close-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.jyotisham-choghadiya-retry-btn {
+    background: #3b82f6;
+    color: white;
+}
+
+.jyotisham-choghadiya-retry-btn:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+}
+
+.jyotisham-choghadiya-close-btn {
+    background: #6b7280;
+    color: white;
+}
+
+.jyotisham-choghadiya-close-btn:hover {
+    background: #4b5563;
+    transform: translateY(-1px);
+}
+
+/* Utility Classes */
+.jyotisham-choghadiya-hidden {
+    display: none !important;
+}
+
+/* Search Input Container */
+.jyotisham-choghadiya-search-input-container {
+    position: relative;
+}
+
+
+
+
+/* Responsive Design - Mobile First Approach */
+
+/* Large Tablets and Small Desktops */
+@media (min-width: 1025px) {
+    .jyotisham-choghadiya-container {
+        padding: 24px;
+    }
+
+    .jyotisham-choghadiya-header h1 {
+        font-size: 2.75rem;
+    }
+
+    .jyotisham-choghadiya-form-container {
+        padding: 32px;
+    }
+
+   
+}
+
+/* Tablets and Small Desktops */
+@media (max-width: 1024px) {
+    .jyotisham-choghadiya-container {
+        padding: 20px;
+    }
+
+    .jyotisham-choghadiya-header h1 {
+        font-size: 2.5rem;
+    }
+
+    .jyotisham-choghadiya-form-container {
+        padding: 28px;
+    }
+
+
+
+    .jyotisham-choghadiya-data-table {
+        font-size: 0.875rem;
+    }
+
+    .jyotisham-choghadiya-data-table th,
+    .jyotisham-choghadiya-data-table td {
+        padding: 14px;
+    }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+    .jyotisham-choghadiya-container {
+        padding: 16px;
+    }
+
+    .jyotisham-choghadiya-header {
+        padding: 24px 0;
+        margin-bottom: 32px;
+    }
+
+    .jyotisham-choghadiya-header h1 {
+        font-size: 2.25rem;
+        margin-bottom: 8px;
+    }
+
+    .jyotisham-choghadiya-header p {
+        font-size: 1rem;
+    }
+
+    .jyotisham-choghadiya-form-container {
+        padding: 24px;
+        margin-bottom: 24px;
+        max-width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .jyotisham-choghadiya-form-group {
+        margin-bottom: 20px;
+    }
+
+    .jyotisham-choghadiya-form-group input,
+    .jyotisham-choghadiya-form-group select {
+        padding: 10px 14px;
+        font-size: 15px;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .jyotisham-choghadiya-form-group input:focus,
+    .jyotisham-choghadiya-form-group select:focus {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: initial;
+    }
+
+    .jyotisham-choghadiya-generate-btn {
+        padding: 14px 20px;
+        font-size: 15px;
+    }
+
+  
+
+    .jyotisham-choghadiya-card {
+        padding: 20px;
+        margin-bottom: 16px;
+    }
+
+    .jyotisham-choghadiya-card h3 {
+        font-size: 1.125rem;
+        margin-bottom: 12px;
+    }
+
+    .jyotisham-choghadiya-data-table {
+        font-size: 0.8rem;
+    }
+
+    .jyotisham-choghadiya-data-table th,
+    .jyotisham-choghadiya-data-table td {
+        padding: 10px;
+    }
+}
+
+/* Large Mobile Devices */
+@media (max-width: 640px) {
+    .jyotisham-choghadiya-container {
+        padding: 12px;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .jyotisham-choghadiya-header h1 {
+        font-size: 2rem;
+        word-wrap: break-word;
+    }
+
+    .jyotisham-choghadiya-form-container {
+        padding: 20px;
+        margin: 0 auto 20px auto;
+        max-width: 90%;
+    }
+
+  
+
+    .jyotisham-choghadiya-card {
+        padding: 16px;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .jyotisham-choghadiya-card h3,
+    .jyotisham-choghadiya-card p {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        max-width: 100%;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+    .jyotisham-choghadiya-container {
+        padding: 8px;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .jyotisham-choghadiya-header h1 {
+        font-size: 1.75rem;
+        margin-bottom: 6px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .jyotisham-choghadiya-header p {
+        font-size: 0.9rem;
+        word-wrap: break-word;
+    }
+
+    .jyotisham-choghadiya-form-container {
+        padding: 16px;
+        margin: 0 auto 20px auto;
+        max-width: 95%;
+        overflow-x: hidden;
+    }
+
+    .jyotisham-choghadiya-form-group {
+        margin-bottom: 16px;
+    }
+
+    .jyotisham-choghadiya-form-group label {
+        font-size: 0.8rem;
+        margin-bottom: 6px;
+        word-wrap: break-word;
+    }
+
+    .jyotisham-choghadiya-form-group input,
+    .jyotisham-choghadiya-form-group select {
+        padding: 8px 12px;
+        font-size: 14px;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .jyotisham-choghadiya-form-group input:focus,
+    .jyotisham-choghadiya-form-group select:focus {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: initial;
+    }
+
+    .jyotisham-choghadiya-generate-btn {
+        padding: 12px 16px;
+        font-size: 14px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+ 
+
+    .jyotisham-choghadiya-card {
+        padding: 12px;
+        margin-bottom: 12px;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .jyotisham-choghadiya-card h3 {
+        font-size: 1rem;
+        margin-bottom: 10px;
+        word-wrap: break-word;
+    }
+
+    .jyotisham-choghadiya-card p {
+        font-size: 0.875rem;
+        margin-bottom: 8px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+}
+
+/* Extra Small Mobile Devices */
+@media (max-width: 360px) {
+    .jyotisham-choghadiya-container {
+        padding: 4px;
+    }
+
+    .jyotisham-choghadiya-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .jyotisham-choghadiya-header p {
+        font-size: 0.85rem;
+    }
+
+    .jyotisham-choghadiya-form-container {
+        padding: 12px;
+    }
+
+   
+
+    .jyotisham-choghadiya-card {
+        padding: 8px;
+    }
+}
+
+/* Landscape Mobile Devices */
+@media (max-height: 500px) and (orientation: landscape) {
+    .jyotisham-choghadiya-header {
+        padding: 12px 0;
+        margin-bottom: 16px;
+    }
+
+    .jyotisham-choghadiya-header h1 {
+        font-size: 1.5rem;
+        margin-bottom: 4px;
+    }
+
+    .jyotisham-choghadiya-header p {
+        font-size: 0.9rem;
+    }
+
+    .jyotisham-choghadiya-form-container {
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+
+  
+
+    .jyotisham-choghadiya-card {
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+}
+
+/* Enhanced Mobile Table Handling */
+@media (max-width: 640px) {
+    .jyotisham-choghadiya-table-container {
+        border-radius: 8px;
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 16px;
+        padding: 0 8px;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        scroll-padding: 0 20px;
+    }
+
+    .jyotisham-choghadiya-data-table {
+        min-width: 500px;
+        width: max-content;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-align: start;
+    }
+
+    .jyotisham-choghadiya-data-table th,
+    .jyotisham-choghadiya-data-table td {
+        padding: 8px 6px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+    }
+}
+
+/* Touch-friendly buttons */
+@media (max-width: 768px) {
+    .jyotisham-choghadiya-generate-btn {
+        min-height: 44px;
+    }
+
+    .jyotisham-choghadiya-retry-btn,
+    .jyotisham-choghadiya-close-btn {
+        min-height: 44px;
+    }
+
+    /* Fix form inputs on mobile */
+    .jyotisham-choghadiya-form-group input,
+    .jyotisham-choghadiya-form-group select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border-radius: 8px;
+    }
+}
+
+/* Universal mobile overflow fixes */
+@media (max-width: 768px) {
+    /* Fix any potential overflow from images and charts */
+    img,
+    svg,
+    canvas {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    /* Fix long URLs and text */
+    .jyotisham-choghadiya-card a,
+    .jyotisham-choghadiya-card p,
+    .jyotisham-choghadiya-card div {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .jyotisham-choghadiya-container {
+        max-width: none;
+        padding: 0;
+    }
+
+    .jyotisham-choghadiya-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .jyotisham-choghadiya-form-container {
+        display: none;
+    }
+
+   
+
+    .jyotisham-choghadiya-card {
+        break-inside: avoid;
+        margin-bottom: 16px;
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+
+    .jyotisham-choghadiya-data-table {
+        font-size: 0.8rem;
+    }
+}

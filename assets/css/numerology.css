@@ -1,0 +1,229 @@
+/* Minimal numerology styles aligned with existing visual language */
+
+.jyotisham-numerology-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+.jyotisham-numerology-header {
+  text-align: center;
+  padding: 32px 0;
+}
+.jyotisham-numerology-header h1 {
+  color: #1a202c;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.jyotisham-numerology-header p {
+  color: #4a5568;
+  font-size: 1rem;
+}
+
+.jyotisham-numerology-form-container {
+  background: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin: 0 auto 24px;
+  max-width: 900px;
+}
+.jyotisham-numerology-form-group {
+  margin-bottom: 16px;
+}
+.jyotisham-numerology-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.jyotisham-numerology-form-group input,
+.jyotisham-numerology-form-group select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  background: #fff;
+  color: #374151;
+}
+
+.jyotisham-numerology-form-group select {
+  height: auto !important; 
+}
+.jyotisham-numerology-form-group input:focus,
+.jyotisham-numerology-form-group select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+.jyotisham-numerology-generate-btn {
+  width: 100%;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.jyotisham-numerology-generate-btn:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.jyotisham-numerology-loading {
+  text-align: center;
+  padding: 32px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  margin: 0 auto;
+  max-width: 900px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.jyotisham-numerology-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f1f5f9;
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.jyotisham-numerology-hidden {
+  display: none !important;
+}
+
+.jyotisham-numerology-results {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.jyotisham-numerology-content {
+  padding: 10px;
+  display: grid;
+  gap: 24px;
+}
+.jyotisham-numerology-two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.jyotisham-numerology-column {
+  display: grid;
+  gap: 24px;
+}
+.jyotisham-numerology-full-width {
+  grid-column: 1 / -1;
+}
+
+.jyotisham-numerology-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.jyotisham-numerology-card h3 {
+  color: #1a202c;
+  margin-bottom: 12px;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.jyotisham-numerology-card p {
+  color: #4a5568;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.jyotisham-numerology-number-display {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 12px 0;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+.jyotisham-numerology-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #3b82f6;
+  min-width: 72px;
+  text-align: center;
+}
+.jyotisham-numerology-master {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+.jyotisham-numerology-meaning {
+  color: #374151;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border-left: 4px solid #3b82f6;
+}
+
+.jyotisham-numerology-error {
+  border-left: 4px solid #ef4444;
+  background: #fef2f2;
+}
+.jyotisham-numerology-error-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.jyotisham-numerology-error-icon {
+  font-size: 1.5rem;
+  margin-top: 4px;
+}
+
+@media (max-width: 768px) {
+  .jyotisham-numerology-two-columns {
+    grid-template-columns: 1fr;
+  }
+  .jyotisham-numerology-header h1 {
+    font-size: 1.75rem;
+  }
+}

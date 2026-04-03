@@ -1,0 +1,210 @@
+/* Minimal Hora styles consistent with plugin */
+.jyotisham-hora-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+.jyotisham-hora-header {
+  text-align: center;
+  padding: 32px 0;
+}
+.jyotisham-hora-header h1 {
+  color: #1a202c;
+  font-size: 2rem;
+  font-weight: 700;
+}
+.jyotisham-hora-header p {
+  color: #4a5568;
+  font-size: 1rem;
+}
+.jyotisham-hora-form-container {
+  background: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin: 0 auto 24px;
+  max-width: 900px;
+}
+.jyotisham-hora-form-group {
+  margin-bottom: 16px;
+}
+.jyotisham-hora-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.jyotisham-hora-form-group input,
+.jyotisham-hora-form-group select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  background: #fff;
+  color: #374151;
+}
+
+.jyotisham-hora-form-group select {
+  height: auto !important; 
+}
+.jyotisham-hora-form-group input:focus,
+.jyotisham-hora-form-group select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+
+.jyotisham-hora-generate-btn {
+  width: 100%;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.jyotisham-hora-generate-btn:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+.jyotisham-hora-loading {
+  text-align: center;
+  padding: 32px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  margin: 0 auto;
+  max-width: 900px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.jyotisham-hora-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f1f5f9;
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.jyotisham-hora-hidden {
+  display: none !important;
+}
+.jyotisham-hora-results {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  width: 100%;
+  max-width: 900px !important;
+  margin: 0 auto;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.jyotisham-hora-content {
+    width: 100% !important;
+    max-width: 900px !important;
+  display: grid;
+  gap: 24px;
+  margin: 0 auto;
+}
+.jyotisham-hora-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+}
+.jyotisham-hora-card h3 {
+  color: #1a202c;
+  margin-bottom: 12px;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.jyotisham-hora-card p {
+  color: #4a5568;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.jyotisham-hora-section-description {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-bottom: 12px;
+  font-style: italic;
+}
+.jyotisham-hora-table-container {
+  width: 100%;
+  margin-top: 12px;
+  background: #fff;
+  border-radius: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+}
+.jyotisham-hora-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+.jyotisham-hora-data-table th,
+.jyotisham-hora-data-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+  min-width: 120px;
+}
+.jyotisham-hora-data-table th {
+  background: #f8fafc;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.jyotisham-hora-error {
+  border-left: 4px solid #ef4444;
+  background: #fef2f2;
+}
+.jyotisham-hora-error-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.jyotisham-hora-error-icon {
+  font-size: 1.5rem;
+  margin-top: 4px;
+}
+@media (max-width: 768px) {
+  .jyotisham-hora-header h1 {
+    font-size: 1.75rem;
+  }
+}

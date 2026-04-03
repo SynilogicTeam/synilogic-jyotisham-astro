@@ -1,0 +1,396 @@
+/* Admin Styles for Jyotisham Kundli Generator */
+
+.jyotisham-admin-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.jyotisham-admin-main {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.jyotisham-admin-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.jyotisham-settings-card,
+.jyotisham-info-card {
+  background: #fff;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.jyotisham-settings-card h2,
+.jyotisham-info-card h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #1a202c;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.jyotisham-actions {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e1e5e9;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.jyotisham-actions .button {
+  min-width: 120px;
+}
+
+/* Status Indicator */
+.jyotisham-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.jyotisham-status-connected {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.jyotisham-status-disconnected {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.jyotisham-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse 2s infinite;
+}
+
+.jyotisham-status-connected .jyotisham-status-dot {
+  background: #10b981;
+}
+
+.jyotisham-status-disconnected .jyotisham-status-dot {
+  background: #ef4444;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.jyotisham-status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.jyotisham-status-badge.jyotisham-status-connected {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.jyotisham-status-badge.jyotisham-status-disconnected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Shortcodes Page */
+.jyotisham-shortcodes-container {
+  display: grid;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.jyotisham-shortcode-card {
+  background: #fff;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.jyotisham-shortcode-card h2 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #1a202c;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.jyotisham-shortcode-card p {
+  margin-bottom: 16px;
+  color: #4a5568;
+  line-height: 1.5;
+}
+
+.jyotisham-shortcode-example {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 12px;
+}
+
+.jyotisham-shortcode-example code {
+  background: #1a202c;
+  color: #e2e8f0;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+  flex: 1;
+  word-break: break-all;
+}
+
+.jyotisham-shortcode-example .button {
+  flex-shrink: 0;
+  font-size: 12px;
+  padding: 6px 12px;
+  height: auto;
+}
+
+/* Form Table Styling */
+.form-table th {
+  width: 200px;
+  padding: 20px 10px 20px 0;
+  vertical-align: top;
+}
+
+.form-table td {
+  padding: 15px 10px;
+  vertical-align: top;
+}
+
+.form-table .description {
+  margin-top: 8px;
+  font-style: italic;
+  color: #6b7280;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .jyotisham-admin-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .jyotisham-admin-sidebar {
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .jyotisham-settings-card,
+  .jyotisham-info-card,
+  .jyotisham-shortcode-card {
+    padding: 16px;
+  }
+  
+  .jyotisham-actions {
+    flex-direction: column;
+  }
+  
+  .jyotisham-actions .button {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .jyotisham-shortcode-example {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .jyotisham-shortcode-example code {
+    word-break: break-word;
+    text-align: center;
+  }
+}
+
+/* Loading States */
+.jyotisham-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.jyotisham-loading::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Success/Error Messages */
+.jyotisham-message {
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin: 16px 0;
+  font-weight: 500;
+}
+
+.jyotisham-message.jyotisham-success {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.jyotisham-message.jyotisham-error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.jyotisham-message.jyotisham-warning {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fbbf24;
+}
+
+/* API Test Button */
+.jyotisham-test-api {
+  position: relative;
+}
+
+.jyotisham-test-api.loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.jyotisham-test-api.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Settings Section Styling */
+.jyotisham-settings-section {
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid #e1e5e9;
+}
+
+.jyotisham-settings-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.jyotisham-settings-section h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #1a202c;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+/* Input Field Enhancements */
+.jyotisham-form-field {
+  position: relative;
+}
+
+.jyotisham-form-field .dashicons {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  pointer-events: none;
+}
+
+.jyotisham-form-field input[type="password"] {
+  padding-right: 40px;
+}
+
+/* Copy to Clipboard Button */
+.jyotisham-copy-btn {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.jyotisham-copy-btn:hover {
+  background: #2563eb;
+}
+
+.jyotisham-copy-btn:active {
+  background: #1d4ed8;
+}
+
+/* Plugin Info Cards */
+.jyotisham-plugin-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.jyotisham-info-item {
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.jyotisham-info-item strong {
+  display: block;
+  color: #374151;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.jyotisham-info-item span {
+  color: #6b7280;
+  font-size: 14px;
+}
