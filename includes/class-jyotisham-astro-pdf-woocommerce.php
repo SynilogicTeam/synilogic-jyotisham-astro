@@ -42,7 +42,6 @@ class Jyotisham_Astro_PDF_WooCommerce {
         add_action('woocommerce_thankyou', array($this, 'render_download_links'));
         add_action('woocommerce_order_details_after_order_table', array($this, 'render_download_links'));
         add_action('woocommerce_email_after_order_table', array($this, 'render_email_download_links'), 10, 4);
-        add_filter('woocommerce_my_account_my_orders_actions', array($this, 'add_my_account_action'), 10, 2);
         add_action('woocommerce_order_item_meta_end', array($this, 'render_structured_order_item_details'), 10, 4);
         add_filter('woocommerce_order_item_get_formatted_meta_data', array($this, 'filter_order_item_meta_display'), 10, 2);
     }
@@ -436,6 +435,10 @@ class Jyotisham_Astro_PDF_WooCommerce {
     }
 
     public function render_structured_order_item_details($item_id, $item, $order, $plain_text) {
+        if (is_admin()) {
+            return;
+        }
+
         if (!$item || empty($item->get_meta('_jyotisham_astro_pdf', true))) {
             return;
         }
@@ -474,6 +477,10 @@ class Jyotisham_Astro_PDF_WooCommerce {
     }
 
     public function filter_order_item_meta_display($formatted_meta, $item) {
+        if (is_admin()) {
+            return $formatted_meta;
+        }
+
         if (empty($item->get_meta('_jyotisham_astro_pdf', true))) {
             return $formatted_meta;
         }
@@ -498,23 +505,6 @@ class Jyotisham_Astro_PDF_WooCommerce {
         }
 
         return $formatted_meta;
-    }
-
-    public function add_my_account_action($actions, $order) {
-        $reports = $this->get_order_reports($order);
-        if (empty($reports)) {
-            return $actions;
-        }
-
-        $first_report = reset($reports);
-        if (!empty($first_report['download_url'])) {
-            $actions['jyotisham_astro_pdf_download'] = array(
-                'url' => $first_report['download_url'],
-                'name' => __('Download PDF', 'synilogic-jyotisham-astro'),
-            );
-        }
-
-        return $actions;
     }
 
     public function maybe_show_generation_spinner($order_id) {
