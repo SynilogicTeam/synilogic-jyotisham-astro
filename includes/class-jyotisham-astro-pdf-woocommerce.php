@@ -149,15 +149,15 @@ class Jyotisham_Astro_PDF_WooCommerce {
             return false;
         }
 
-        if (!isset($_POST['jyotisham_astro_pdf_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_nonce'])), 'jyotisham_astro_pdf_add_to_cart')) {
-            wc_add_notice(__('Security check failed. Please refresh the product page and try again.', 'synilogic-jyotisham-astro'), 'error');
-            return false;
-        }
-
         $data = $this->get_request_data();
 
         if (empty($data['name']) || empty($data['date']) || empty($data['time']) || empty($data['place']) || empty($data['latitude']) || empty($data['longitude']) || empty($data['timezone']) || empty($data['lang']) || empty($data['style'])) {
-            wc_add_notice(__('Please complete all birth details and select a valid place from Google Places.', 'synilogic-jyotisham-astro'), 'error');
+            wc_add_notice(__('Please fill out the details before to buy the report.', 'synilogic-jyotisham-astro'), 'error');
+            return false;
+        }
+
+        if (!isset($_POST['jyotisham_astro_pdf_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_nonce'])), 'jyotisham_astro_pdf_add_to_cart')) {
+            wc_add_notice(__('Security check failed. Please refresh the product page and try again.', 'synilogic-jyotisham-astro'), 'error');
             return false;
         }
 
