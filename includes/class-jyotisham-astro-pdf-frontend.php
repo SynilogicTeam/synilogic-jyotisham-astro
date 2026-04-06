@@ -10,9 +10,11 @@ if (!defined('ABSPATH')) {
 class Jyotisham_Astro_PDF_Frontend {
 
     private $maps;
+    private $api;
 
     public function __construct() {
         $this->maps = new Jyotisham_Astro_PDF_Google_Maps();
+        $this->api = new Jyotisham_Astro_PDF_API();
 
         add_action('wp_enqueue_scripts', array($this, 'enqueue_assets'));
         add_action('woocommerce_before_add_to_cart_button', array($this, 'render_form'));
@@ -25,6 +27,10 @@ class Jyotisham_Astro_PDF_Frontend {
 
         $product = wc_get_product(get_the_ID());
         if (!$this->is_astro_pdf_product($product)) {
+            return;
+        }
+
+        if (!$this->api->is_configured()) {
             return;
         }
 
@@ -60,6 +66,11 @@ class Jyotisham_Astro_PDF_Frontend {
         global $product;
 
         if (!$this->is_astro_pdf_product($product)) {
+            return;
+        }
+
+        if (!$this->api->is_configured()) {
+            echo '<p class="woocommerce-error">' . esc_html__('API not configured. Please contact the administrator.', 'synilogic-jyotisham-astro') . '</p>';
             return;
         }
 

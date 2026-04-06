@@ -144,6 +144,11 @@ class Jyotisham_Astro_PDF_WooCommerce {
             return $passed;
         }
 
+        if (!$this->api->is_configured()) {
+            wc_add_notice(__('API not configured. Please contact the administrator.', 'synilogic-jyotisham-astro'), 'error');
+            return false;
+        }
+
         if (!isset($_POST['jyotisham_astro_pdf_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_nonce'])), 'jyotisham_astro_pdf_add_to_cart')) {
             wc_add_notice(__('Security check failed. Please refresh the product page and try again.', 'synilogic-jyotisham-astro'), 'error');
             return false;
@@ -529,7 +534,6 @@ class Jyotisham_Astro_PDF_WooCommerce {
             'report_type' => !empty($stored_data['report_type']) ? $stored_data['report_type'] : $item->get_meta('_jyotisham_astro_pdf_report_type', true),
             'lang' => isset($stored_data['lang']) ? $stored_data['lang'] : 'en',
             'style' => isset($stored_data['style']) ? $stored_data['style'] : 'north',
-            'price' => $stored_data['price'],
             'watermark' => $this->api->get_watermark_text(),
         );
 
