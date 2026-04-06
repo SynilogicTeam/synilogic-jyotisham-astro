@@ -33,6 +33,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
         add_filter('woocommerce_add_cart_item_data', array($this, 'add_cart_item_data'), 10, 3);
         add_filter('woocommerce_get_item_data', array($this, 'display_cart_item_data'), 10, 2);
         add_action('woocommerce_checkout_process', array($this, 'validate_checkout_report_items'));
+        add_action('wp_footer', array($this, 'render_cod_selection_notice_script'));
         add_action('woocommerce_checkout_create_order_line_item', array($this, 'save_order_item_meta'), 10, 4);
         add_action('woocommerce_payment_complete', array($this, 'generate_pdfs_for_order'));
         add_action('woocommerce_order_status_processing', array($this, 'generate_pdfs_for_order'));
@@ -253,10 +254,14 @@ class Jyotisham_Astro_PDF_WooCommerce {
             return;
         }
 
+        $has_report_product = false;
+
         foreach (WC()->cart->get_cart() as $cart_item) {
             if (empty($cart_item['jyotisham_astro_pdf'])) {
                 continue;
             }
+
+            $has_report_product = true;
 
             $data = $cart_item['jyotisham_astro_pdf'];
 
@@ -265,6 +270,49 @@ class Jyotisham_Astro_PDF_WooCommerce {
                 break;
             }
         }
+
+        if (!$has_report_product) {
+            return;
+        }
+
+        $chosen_payment_method = isset($_POST['payment_method'])
+            ? sanitize_key(wp_unslash($_POST['payment_method']))
+            : (WC()->session ? WC()->session->get('chosen_payment_method') : '');
+
+        if ($chosen_payment_method === 'cod') {
+            wc_add_notice(__('Cash on Delivery is not available for report products. Please choose an online payment method.', 'synilogic-jyotisham-astro'), 'error');
+        }
+    }
+
+    public function render_cod_selection_notice_script() {
+        if (!function_exists('is_checkout') || !is_checkout() || is_order_received_page()) {
+            return;
+        }
+
+        if (!$this->cart_has_report_products()) {
+            return;
+        }
+
+        $message = esc_js(__('Cash on Delivery is not available for report products. Please choose an online payment method.', 'synilogic-jyotisham-astro'));
+
+        echo '<script>';
+        echo '(function(){';
+        echo 'var noticeId="jyotisham-cod-report-notice";';
+        echo 'function paymentWrap(){return document.querySelector(".wc_payment_methods")||document.querySelector(".wc-block-checkout__payment-method")||document.querySelector(".wc-block-components-radio-control-group")||document.querySelector(".wc-block-checkout__payment-methods");}';
+        echo 'function placeOrderButtons(){return document.querySelectorAll("#place_order, form.checkout button[type=submit], .wc-block-components-checkout-place-order-button");}';
+        echo 'function codSelected(){var selected=document.querySelector("input[name=\"payment_method\"]:checked");if(selected){return selected.value==="cod";}var cod=document.querySelector("input[type=\"radio\"][value=\"cod\"]");return !!(cod&&cod.checked);}';
+        echo 'function ensureNotice(){var wrap=paymentWrap();if(!wrap){return null;}var notice=document.getElementById(noticeId);if(!notice){notice=document.createElement("div");notice.id=noticeId;notice.className="woocommerce-error";notice.style.marginTop="10px";notice.textContent="' . $message . '";wrap.parentNode.insertBefore(notice,wrap.nextSibling);}return notice;}';
+        echo 'function blockPlaceOrder(){var blocked=codSelected();var buttons=placeOrderButtons();for(var i=0;i<buttons.length;i++){var btn=buttons[i];if(!btn){continue;}btn.disabled=blocked;if(blocked){btn.setAttribute("aria-disabled","true");btn.classList.add("disabled");}else{btn.removeAttribute("aria-disabled");btn.classList.remove("disabled");}}}';
+        echo 'function toggleNotice(){var notice=ensureNotice();if(notice){notice.style.display=codSelected()?"block":"none";}blockPlaceOrder();}';
+        echo 'function preventSubmit(e){if(!codSelected()){return;}if(e&&typeof e.preventDefault==="function"){e.preventDefault();}if(e&&typeof e.stopPropagation==="function"){e.stopPropagation();}toggleNotice();var notice=document.getElementById(noticeId);if(notice&&typeof notice.scrollIntoView==="function"){notice.scrollIntoView({behavior:"smooth",block:"center"});}}';
+        echo 'document.addEventListener("change",function(e){if(e&&e.target&&e.target.matches("input[type=radio]")){toggleNotice();}},true);';
+        echo 'document.addEventListener("submit",preventSubmit,true);';
+        echo 'document.addEventListener("click",function(e){var t=e&&e.target?e.target.closest("#place_order, .wc-block-components-checkout-place-order-button"):null;if(!t){return;}preventSubmit(e);},true);';
+        echo 'if(window.jQuery){jQuery(document.body).on("updated_checkout",toggleNotice);}';
+        echo 'var mo=new MutationObserver(toggleNotice);mo.observe(document.body,{childList:true,subtree:true});';
+        echo 'toggleNotice();';
+        echo '})();';
+        echo '</script>';
     }
 
     public function save_order_item_meta($item, $cart_item_key, $values, $order) {
@@ -292,6 +340,10 @@ class Jyotisham_Astro_PDF_WooCommerce {
         $order = wc_get_order($order_id);
 
         if (!$order) {
+            return;
+        }
+
+        if ($this->is_cod_order($order)) {
             return;
         }
 
@@ -368,6 +420,10 @@ class Jyotisham_Astro_PDF_WooCommerce {
             return;
         }
 
+        if ($this->is_cod_order($order)) {
+            return;
+        }
+
         $order_key = (int) $order->get_id();
         if (isset($this->rendered_download_sections[$order_key])) {
             return;
@@ -430,6 +486,10 @@ class Jyotisham_Astro_PDF_WooCommerce {
 
     public function render_email_download_links($order, $sent_to_admin, $plain_text, $email) {
         if ($plain_text) {
+            return;
+        }
+
+        if ($this->is_cod_order($order)) {
             return;
         }
 
@@ -683,6 +743,20 @@ class Jyotisham_Astro_PDF_WooCommerce {
         return false;
     }
 
+    private function cart_has_report_products() {
+        if (!WC()->cart) {
+            return false;
+        }
+
+        foreach (WC()->cart->get_cart() as $cart_item) {
+            if (!empty($cart_item['jyotisham_astro_pdf'])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function order_has_download_url($order) {
         $reports = $this->get_order_reports($order);
 
@@ -693,6 +767,10 @@ class Jyotisham_Astro_PDF_WooCommerce {
         }
 
         return false;
+    }
+
+    private function is_cod_order($order) {
+        return $order && $order->get_payment_method() === 'cod';
     }
 
     private function get_order_report_errors($order) {
