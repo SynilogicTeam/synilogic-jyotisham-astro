@@ -285,6 +285,10 @@ class Jyotisham_Astro_PDF_WooCommerce {
             return;
         }
 
+        if (!$order->is_paid()) {
+            return;
+        }
+
         $updated_reports = array();
         $order_changed = false;
         $processed_items = 0;
@@ -356,6 +360,10 @@ class Jyotisham_Astro_PDF_WooCommerce {
 
         $order_key = (int) $order->get_id();
         if (isset($this->rendered_download_sections[$order_key])) {
+            return;
+        }
+
+        if (!$order->is_paid()) {
             return;
         }
 
