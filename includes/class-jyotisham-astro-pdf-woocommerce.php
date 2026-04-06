@@ -275,7 +275,17 @@ class Jyotisham_Astro_PDF_WooCommerce {
         $data = $values['jyotisham_astro_pdf'];
 
         $item->add_meta_data('_jyotisham_astro_pdf', $data, true);
+        $item->add_meta_data(__('Astro PDF Report', 'synilogic-jyotisham-astro'), isset($data['report_slug']) ? $data['report_slug'] : '', true);
         $item->add_meta_data('_jyotisham_astro_pdf_report_type', $data['report_type'], true);
+        $item->add_meta_data(__('Birth Name', 'synilogic-jyotisham-astro'), isset($data['name']) ? $data['name'] : '', true);
+        $item->add_meta_data(__('Birth Date', 'synilogic-jyotisham-astro'), isset($data['date']) ? $data['date'] : '', true);
+        $item->add_meta_data(__('Birth Time', 'synilogic-jyotisham-astro'), isset($data['time']) ? $data['time'] : '', true);
+        $item->add_meta_data(__('Birth Place', 'synilogic-jyotisham-astro'), isset($data['place']) ? $data['place'] : '', true);
+        $item->add_meta_data(__('Latitude', 'synilogic-jyotisham-astro'), isset($data['latitude']) ? $data['latitude'] : '', true);
+        $item->add_meta_data(__('Longitude', 'synilogic-jyotisham-astro'), isset($data['longitude']) ? $data['longitude'] : '', true);
+        $item->add_meta_data(__('Timezone', 'synilogic-jyotisham-astro'), isset($data['timezone']) ? $data['timezone'] : '', true);
+        $item->add_meta_data(__('Language', 'synilogic-jyotisham-astro'), isset($data['lang']) ? $data['lang'] : 'en', true);
+        $item->add_meta_data(__('Chart Style', 'synilogic-jyotisham-astro'), isset($data['style']) ? $data['style'] : 'north', true);
     }
 
     public function generate_pdfs_for_order($order_id) {
@@ -455,6 +465,8 @@ class Jyotisham_Astro_PDF_WooCommerce {
         if (!is_array($data)) {
             return;
         }
+
+        $this->print_download_styles_once();
 
         $rows = array(
             __('Birth Name', 'synilogic-jyotisham-astro') => isset($data['name']) ? $data['name'] : '',
