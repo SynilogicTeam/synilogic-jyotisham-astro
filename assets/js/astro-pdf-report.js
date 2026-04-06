@@ -80,9 +80,47 @@
             timezoneInput.value = '';
         }
 
+        // Cache for storing search and timezone results to reduce API calls.
+        var searchCache = {};
+        var timezoneCache = {};
+        var inputTimeout = null;
+        var minChars = 3;
+
+        function normalizeInput(str) {
+            return str.trim().replace(/\s+/g, ' ');
+        }
+
+        function getCachedResult(query) {
+            return searchCache[query.toLowerCase()] || null;
+        }
+
+        function setCachedResult(query, result) {
+            searchCache[query.toLowerCase()] = result;
+        }
+
+        function getTimezoneCacheKey(latitude, longitude) {
+            return String(latitude) + ',' + String(longitude);
+        }
+
+        function getCachedTimezone(latitude, longitude) {
+            return timezoneCache[getTimezoneCacheKey(latitude, longitude)] || null;
+        }
+
+        function setCachedTimezone(latitude, longitude, timezone) {
+            timezoneCache[getTimezoneCacheKey(latitude, longitude)] = timezone;
+        }
+
+        function googleMapsReady() {
+            return !!(window.google && google.maps && google.maps.places);
+        }
+
         function initAutocomplete() {
-            if (!window.google || !google.maps || !google.maps.places || !placeInput) {
+            if (!googleMapsReady() || !placeInput) {
                 return false;
+            }
+
+            if (autocomplete) {
+                return true;
             }
 
             autocomplete = new google.maps.places.Autocomplete(placeInput, {
@@ -91,6 +129,16 @@
             });
 
             autocomplete.addListener('place_changed', function() {
+                clearTimeout(inputTimeout);
+                var inputValue = normalizeInput(placeInput.value);
+
+                // Ensure minimum 3 character requirement.
+                if (inputValue.length < minChars) {
+                    resetLocationFields();
+                    showStatus(statusEl, 'Please type at least 3 characters for location search.', 'info');
+                    return;
+                }
+
                 var place = autocomplete.getPlace();
 
                 resetLocationFields();
@@ -103,13 +151,36 @@
                 var latitude = place.geometry.location.lat();
                 var longitude = place.geometry.location.lng();
 
+                var cachedTimezone = getCachedTimezone(latitude, longitude);
+                setCachedResult(inputValue, {
+                    latitude: latitude,
+                    longitude: longitude,
+                    address: place.formatted_address || inputValue,
+                    timezone: cachedTimezone || ''
+                });
+
                 latitudeInput.value = latitude;
                 longitudeInput.value = longitude;
+
+                if (cachedTimezone) {
+                    timezoneInput.value = cachedTimezone;
+                    showStatus(statusEl, 'Location confirmed (cached).', 'success');
+                    return;
+                }
+
                 timezoneInput.value = '';
                 showStatus(statusEl, 'Fetching timezone...', 'info');
 
                 timezoneRequest(latitude, longitude).then(function(timezone) {
                     timezoneInput.value = timezone;
+                    setCachedTimezone(latitude, longitude, timezone);
+
+                    var existing = getCachedResult(inputValue);
+                    if (existing) {
+                        existing.timezone = timezone;
+                        setCachedResult(inputValue, existing);
+                    }
+
                     showStatus(statusEl, 'Location confirmed.', 'success');
                 }).catch(function(error) {
                     showStatus(statusEl, error.message || 'Timezone lookup failed.', 'error');
@@ -119,7 +190,7 @@
             return true;
         }
 
-        function waitForGoogleMaps(retries) {
+        function waitForGoogleMapsAndInit(retries) {
             var attempts = retries || 0;
 
             if (initAutocomplete()) {
@@ -131,9 +202,45 @@
             }
 
             window.setTimeout(function() {
-                waitForGoogleMaps(attempts + 1);
+                waitForGoogleMapsAndInit(attempts + 1);
             }, 250);
         }
+
+        function handlePlaceInput() {
+            clearTimeout(inputTimeout);
+            resetLocationFields();
+            showStatus(statusEl, '', '');
+
+            var inputValue = normalizeInput(placeInput.value);
+            var cachedResult = getCachedResult(inputValue);
+
+            if (cachedResult) {
+                latitudeInput.value = cachedResult.latitude;
+                longitudeInput.value = cachedResult.longitude;
+                timezoneInput.value = cachedResult.timezone || '';
+                showStatus(statusEl, cachedResult.timezone ? 'Location confirmed (cached).' : 'Location found in cache.', 'success');
+                return;
+            }
+
+            if (inputValue.length < minChars) {
+                return;
+            }
+
+            // Autocomplete initializes only after 3 words and user pause.
+            inputTimeout = window.setTimeout(function() {
+                waitForGoogleMapsAndInit();
+            }, 400);
+        }
+
+        function attachPlaceInputListener() {
+            if (!placeInput) {
+                return;
+            }
+
+            placeInput.addEventListener('input', handlePlaceInput);
+        }
+
+        attachPlaceInputListener();
 
         form.addEventListener('submit', function(event) {
             var timezoneValue = timezoneInput ? timezoneInput.value.trim() : '';
@@ -165,14 +272,7 @@
             setLoading(form, true);
         });
 
-        if (placeInput) {
-            placeInput.addEventListener('input', function() {
-                resetLocationFields();
-                showStatus(statusEl, '', '');
-            });
-        }
-
-        waitForGoogleMaps();
+        // Do not initialize autocomplete immediately to avoid API calls on early typing.
     }
 
     ready(function() {
