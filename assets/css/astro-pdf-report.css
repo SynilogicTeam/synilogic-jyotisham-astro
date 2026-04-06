@@ -1,0 +1,125 @@
+.jyotisham-astro-pdf-form-wrap {
+  margin: 20px 0;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.jyotisham-astro-pdf-form-wrap h3 {
+  margin: 0 0 18px;
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
+.jyotisham-astro-pdf-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.jyotisham-astro-pdf-form-wrap .form-row {
+  margin: 0;
+}
+
+.jyotisham-astro-pdf-form-wrap label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.jyotisham-astro-pdf-form-wrap input[type="text"],
+.jyotisham-astro-pdf-form-wrap input[type="date"],
+.jyotisham-astro-pdf-form-wrap input[type="time"],
+.jyotisham-astro-pdf-form-wrap input[type="number"],
+.jyotisham-astro-pdf-form-wrap select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.jyotisham-astro-pdf-form-wrap input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.jyotisham-astro-pdf-form-wrap .required {
+  color: #dc2626;
+}
+
+.jyotisham-astro-pdf-status {
+  margin-top: 16px;
+  font-size: 0.95rem;
+  min-height: 1.25rem;
+}
+
+.jyotisham-astro-pdf-status.is-error {
+  color: #b91c1c;
+}
+
+.jyotisham-astro-pdf-status.is-success {
+  color: #047857;
+}
+
+.jyotisham-astro-pdf-status.is-info {
+  color: #1d4ed8;
+}
+
+.jyotisham-astro-pdf-spinner {
+  display: none;
+  margin-top: 14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid rgba(37, 99, 235, 0.18);
+  border-top-color: #2563eb;
+  animation: jyotishamAstroPdfSpin 0.9s linear infinite;
+}
+
+.jyotisham-astro-pdf-spinner.is-visible {
+  display: inline-block;
+}
+
+.jyotisham-astro-pdf-loading-spinner {
+  display: inline-block;
+  vertical-align: middle;
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  border-radius: 50%;
+  border: 2px solid rgba(37, 99, 235, 0.2);
+  border-top-color: #2563eb;
+  animation: jyotishamAstroPdfSpin 0.9s linear infinite;
+}
+
+.jyotisham-astro-pdf-warning {
+  margin-top: 16px;
+}
+
+.jyotisham-astro-pdf-downloads {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.jyotisham-astro-pdf-downloads .button {
+  display: inline-block;
+}
+
+@keyframes jyotishamAstroPdfSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .jyotisham-astro-pdf-grid {
+    grid-template-columns: 1fr;
+  }
+}

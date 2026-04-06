@@ -46,6 +46,12 @@ require_once JYOTISHAM_ASTRO_API_PLUGIN_PATH . 'includes/class-jyotisham-hora-sh
 require_once JYOTISHAM_ASTRO_API_PLUGIN_PATH . 'includes/class-jyotisham-horoscope-api.php';
 require_once JYOTISHAM_ASTRO_API_PLUGIN_PATH . 'includes/class-jyotisham-horoscope-ajax.php';
 require_once JYOTISHAM_ASTRO_API_PLUGIN_PATH . 'includes/class-jyotisham-horoscope-shortcode.php';
+// WooCommerce PDF report feature
+require_once JYOTISHAM_ASTRO_API_PLUGIN_PATH . 'includes/class-jyotisham-astro-pdf-admin.php';
+require_once JYOTISHAM_ASTRO_API_PLUGIN_PATH . 'includes/class-jyotisham-astro-pdf-google-maps.php';
+require_once JYOTISHAM_ASTRO_API_PLUGIN_PATH . 'includes/class-jyotisham-astro-pdf-api.php';
+require_once JYOTISHAM_ASTRO_API_PLUGIN_PATH . 'includes/class-jyotisham-astro-pdf-frontend.php';
+require_once JYOTISHAM_ASTRO_API_PLUGIN_PATH . 'includes/class-jyotisham-astro-pdf-woocommerce.php';
 
 /**
  * Main plugin class
@@ -96,6 +102,10 @@ class JyotishamAstroAPI {
         // Initialize Horoscope
         new Jyotisham_Horoscope_Ajax();
         new Jyotisham_Horoscope_Shortcode();
+
+        // Initialize WooCommerce Astro PDF reports
+        new Jyotisham_Astro_PDF_Admin();
+        new Jyotisham_Astro_PDF_WooCommerce();
     }
 
     // Since WP 4.6+, translations are loaded automatically from WordPress.org.
