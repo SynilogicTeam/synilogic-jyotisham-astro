@@ -280,85 +280,41 @@ class Jyotisham_Admin {
     }
     
     public function shortcodes_page() {
+        $shortcodes = array(
+            array('label' => 'Kundli Generator', 'shortcode' => '[jyotisham_kundli]', 'description' => 'Displays the complete Kundli form with all features.'),
+            array('label' => 'Numerology', 'shortcode' => '[jyotisham_numerology]', 'description' => 'Displays Numerology for name and date-based report.'),
+            array('label' => 'Hora Muhurta', 'shortcode' => '[jyotisham_hora]', 'description' => 'Displays Hora Muhurta for planetary hours.'),
+            array('label' => 'Horoscope', 'shortcode' => '[jyotisham_horoscope]', 'description' => 'Displays Horoscope with daily, weekly, monthly, and yearly predictions.'),
+            array('label' => 'Sade Sati Report', 'shortcode' => '[jyotisham_sadesati]', 'description' => 'Displays the Sade Sati report for current Sade Sati status and remedies.'),
+            array('label' => 'Kundli Matching Generator', 'shortcode' => '[jyotisham_matching]', 'description' => 'Displays Kundli matching for compatibility analysis between two people.'),
+            array('label' => 'Panchang Generator', 'shortcode' => '[jyotisham_panchang]', 'description' => 'Displays Panchang for detailed astrological information.'),
+            array('label' => 'Choghadiya Generator', 'shortcode' => '[jyotisham_choghadiya]', 'description' => 'Displays Choghadiya Muhurat for auspicious timing information.'),
+        );
         ?>
         <div class="wrap">
             <h1>Available Shortcodes</h1>
             
-            <div class="jyotisham-shortcodes-container">
-                <div class="jyotisham-shortcode-card">
-                    <h2>Kundli Generator</h2>
-                    <p>Displays the complete Kundli generator form with all features.</p>
-                    <div class="jyotisham-shortcode-example">
-                        <code>[jyotisham_kundli]</code>
-                        <button type="button" class="button button-small" onclick="copyToClipboard('[jyotisham_kundli]')">Copy</button>
-                    </div>
-                </div>
-                
-				<div class="jyotisham-shortcode-card">
-					<h2>Numerology</h2>
-					<p>Displays the Numerology generator for name and date-based numerology report.</p>
-					<div class="jyotisham-shortcode-example">
-						<code>[jyotisham_numerology]</code>
-						<button type="button" class="button button-small" onclick="copyToClipboard('[jyotisham_numerology]')">Copy</button>
-					</div>
-				</div>
-
-				<div class="jyotisham-shortcode-card">
-					<h2>Hora Muhurta</h2>
-					<p>Displays the Hora Muhurta generator for planetary hours.</p>
-					<div class="jyotisham-shortcode-example">
-						<code>[jyotisham_hora]</code>
-						<button type="button" class="button button-small" onclick="copyToClipboard('[jyotisham_hora]')">Copy</button>
-					</div>
-				</div>
-
-				<div class="jyotisham-shortcode-card">
-					<h2>Horoscope</h2>
-					<p>Displays the Horoscope generator with daily, weekly, monthly, and yearly predictions.</p>
-					<div class="jyotisham-shortcode-example">
-						<code>[jyotisham_horoscope]</code>
-						<button type="button" class="button button-small" onclick="copyToClipboard('[jyotisham_horoscope]')">Copy</button>
-					</div>
-				</div>
-
-				<div class="jyotisham-shortcode-card">
-					<h2>Sade Sati Report</h2>
-					<p>Displays the Sade Sati report generator for current Sade Sati status and remedies.</p>
-					<div class="jyotisham-shortcode-example">
-						<code>[jyotisham_sadesati]</code>
-						<button type="button" class="button button-small" onclick="copyToClipboard('[jyotisham_sadesati]')">Copy</button>
-					</div>
-				</div>
-
-                
-                <div class="jyotisham-shortcode-card">
-                    <h2>Kundli Matching Generator</h2>
-                    <p>Displays the Kundli matching generator for compatibility analysis between two people.</p>
-                    <div class="jyotisham-shortcode-example">
-                        <code>[jyotisham_matching]</code>
-                        <button type="button" class="button button-small" onclick="copyToClipboard('[jyotisham_matching]')">Copy</button>
-                    </div>
-                </div>
-
-                <div class="jyotisham-shortcode-card">
-                    <h2>Panchang Generator</h2>
-                    <p>Displays the Panchang generator for detailed astrological information.</p>
-                    <div class="jyotisham-shortcode-example">
-                        <code>[jyotisham_panchang]</code>
-                        <button type="button" class="button button-small" onclick="copyToClipboard('[jyotisham_panchang]')">Copy</button>
-                    </div>
-                </div>
-                
-                <div class="jyotisham-shortcode-card">
-                    <h2>Choghadiya Generator</h2>
-                    <p>Displays the Choghadiya Muhurat generator for auspicious timing information.</p>
-                    <div class="jyotisham-shortcode-example">
-                        <code>[jyotisham_choghadiya]</code>
-                        <button type="button" class="button button-small" onclick="copyToClipboard('[jyotisham_choghadiya]')">Copy</button>
-                    </div>
-                
-                </div>
-             
+            <div class="jyotisham-shortcodes-panel">
+                <table class="widefat striped jyotisham-shortcodes-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">API Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Plugin Shortcode</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($shortcodes as $shortcode) : ?>
+                            <tr>
+                                <td><?php echo esc_html($shortcode['label']); ?></td>
+                                <td class="jyotisham-shortcode-description"><?php echo esc_html($shortcode['description']); ?></td>
+                                <td>
+                                    <code class="jyotisham-shortcode-code" onclick="copyToClipboard('<?php echo esc_js($shortcode['shortcode']); ?>')"><?php echo esc_html($shortcode['shortcode']); ?></code>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
         <?php
