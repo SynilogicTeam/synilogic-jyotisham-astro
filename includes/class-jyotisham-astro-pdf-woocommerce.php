@@ -15,7 +15,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
     private $download_styles_printed = false;
 
     public function __construct() {
-        if (!class_exists('WooCommerce')) {
+        if (!class_exists('WooCommerce') || !$this->is_globally_enabled()) {
             return;
         }
 
@@ -47,6 +47,10 @@ class Jyotisham_Astro_PDF_WooCommerce {
         add_filter('woocommerce_order_item_get_formatted_meta_data', array($this, 'filter_order_item_meta_display'), 10, 2);
     }
 
+    private function is_globally_enabled() {
+        return get_option('jyotisham_enable_astro_pdf', '1') === '1';
+    }
+
     public function add_product_type($types) {
         $types['astro_pdf_report'] = __('Astro PDF Report', 'synilogic-jyotisham-astro');
         return $types;
@@ -62,7 +66,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
 
     public function add_product_data_tab($tabs) {
         $tabs['jyotisham_astro_pdf'] = array(
-            'label' => __('Astro PDF', 'synilogic-jyotisham-astro'),
+            'label' => __('Astro PDF Report', 'synilogic-jyotisham-astro'),
             'target' => 'jyotisham-astro-pdf-product-data',
             'priority' => 25,
         );
@@ -86,9 +90,9 @@ class Jyotisham_Astro_PDF_WooCommerce {
         <div id="jyotisham-astro-pdf-product-data" class="panel woocommerce_options_panel">
             <div class="options_group">
                 <p class="form-field">
-                    <label for="_jyotisham_astro_pdf_enabled"><?php esc_html_e('Enable Astro PDF', 'synilogic-jyotisham-astro'); ?></label>
+                    <label for="_jyotisham_astro_pdf_enabled"><?php esc_html_e('Enable Astro PDF Report', 'synilogic-jyotisham-astro'); ?></label>
                     <input type="checkbox" id="_jyotisham_astro_pdf_enabled" name="_jyotisham_astro_pdf_enabled" value="yes" <?php checked($current_enabled, 'yes'); ?> />
-                    <span class="description"><?php esc_html_e('Turn on Astro PDF only for report products. Turn off to keep this as a normal physical product.', 'synilogic-jyotisham-astro'); ?></span>
+                    <span class="description"><?php esc_html_e('Turn on Astro PDF Report only for report products. Turn off to keep this as a normal physical product.', 'synilogic-jyotisham-astro'); ?></span>
                 </p>
 
                 <p class="form-field">

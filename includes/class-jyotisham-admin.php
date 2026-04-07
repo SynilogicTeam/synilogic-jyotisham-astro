@@ -61,6 +61,11 @@ class Jyotisham_Admin {
             'sanitize_callback' => array($this, 'sanitize_api_status'),
             'default' => 'disconnected'
         ));
+        register_setting('jyotisham_settings', 'jyotisham_enable_astro_pdf', array(
+            'type' => 'string',
+            'sanitize_callback' => array($this, 'sanitize_checkbox_value'),
+            'default' => '1'
+        ));
         
         add_settings_section(
             'jyotisham_api_section',
@@ -105,6 +110,10 @@ class Jyotisham_Admin {
         $value = is_string($value) ? strtolower($value) : '';
         return in_array($value, $allowed, true) ? $value : 'disconnected';
     }
+
+    public function sanitize_checkbox_value($value) {
+        return !empty($value) ? '1' : '0';
+    }
     
     public function api_section_callback() {
         echo '<p>Configure your API keys to enable the Kundli generator functionality.</p>';
@@ -142,6 +151,8 @@ class Jyotisham_Admin {
         $api_key = get_option('jyotisham_api_key', '');
         $google_maps_key = get_option('jyotisham_google_maps_key', '');
         $api_status = get_option('jyotisham_api_status', 'disconnected');
+        $enable_astro_pdf = get_option('jyotisham_enable_astro_pdf', '1');
+        $woocommerce_installed = class_exists('WooCommerce');
         ?>
         <div class="wrap">
             <h1>Astro API By Synilogic Settings</h1>
@@ -186,6 +197,26 @@ class Jyotisham_Admin {
                                             Enter your Google Maps API key for location autocomplete functionality. 
                                             <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="noopener noreferrer">Get your Google Maps API key here</a>
                                         </p>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th scope="row">
+                                        <label for="jyotisham_enable_astro_pdf">Enable Astro PDF Report</label>
+                                    </th>
+                                    <td>
+                                        <label>
+                                            <input type="checkbox"
+                                                   id="jyotisham_enable_astro_pdf"
+                                                   name="jyotisham_enable_astro_pdf"
+                                                   value="1"
+                                                   <?php checked($enable_astro_pdf, '1'); ?>
+                                                   <?php disabled(!$woocommerce_installed); ?> />
+                                            Enable Astro PDF Report product options in WooCommerce products.
+                                        </label>
+                                        <?php if (!$woocommerce_installed) : ?>
+                                            <p class="description" style="color:#b32d2e; font-weight:600; margin-top:8px;">*You must install Woocommerce Plugin to enable PDF option</p>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                                 
@@ -354,9 +385,15 @@ class Jyotisham_Admin {
         
         $api_key = isset($_POST['jyotisham_api_key']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_api_key'])) : '';
         $google_maps_key = isset($_POST['jyotisham_google_maps_key']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_google_maps_key'])) : '';
+        $enable_astro_pdf = isset($_POST['jyotisham_enable_astro_pdf']) ? '1' : '0';
+
+        if (!class_exists('WooCommerce')) {
+            $enable_astro_pdf = '0';
+        }
         
         update_option('jyotisham_api_key', $api_key);
         update_option('jyotisham_google_maps_key', $google_maps_key);
+        update_option('jyotisham_enable_astro_pdf', $enable_astro_pdf);
         
         // Test API connection after saving
         $this->test_api_connection();
