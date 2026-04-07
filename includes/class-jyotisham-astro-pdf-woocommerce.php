@@ -74,11 +74,23 @@ class Jyotisham_Astro_PDF_WooCommerce {
         global $post;
 
         $product_id = $post instanceof WP_Post ? (int) $post->ID : 0;
+        $current_enabled = $product_id ? get_post_meta($product_id, '_jyotisham_astro_pdf_enabled', true) : '';
         $current_report_type = $product_id ? get_post_meta($product_id, '_jyotisham_astro_pdf_report_type', true) : '';
         $current_report_slug = $product_id ? get_post_meta($product_id, '_jyotisham_astro_pdf_report_slug', true) : '';
+
+        // Backward compatibility for products created before the toggle existed.
+        if ($current_enabled === '' && (!empty($current_report_type) || !empty($current_report_slug))) {
+            $current_enabled = 'yes';
+        }
         ?>
         <div id="jyotisham-astro-pdf-product-data" class="panel woocommerce_options_panel">
             <div class="options_group">
+                <p class="form-field">
+                    <label for="_jyotisham_astro_pdf_enabled"><?php esc_html_e('Enable Astro PDF', 'synilogic-jyotisham-astro'); ?></label>
+                    <input type="checkbox" id="_jyotisham_astro_pdf_enabled" name="_jyotisham_astro_pdf_enabled" value="yes" <?php checked($current_enabled, 'yes'); ?> />
+                    <span class="description"><?php esc_html_e('Turn on Astro PDF only for report products. Turn off to keep this as a normal physical product.', 'synilogic-jyotisham-astro'); ?></span>
+                </p>
+
                 <p class="form-field">
                     <span class="description"><?php esc_html_e('Select a report type below to turn this product into a report product with required birth details on the storefront.', 'synilogic-jyotisham-astro'); ?></span>
                 </p>
@@ -107,6 +119,8 @@ class Jyotisham_Astro_PDF_WooCommerce {
             return;
         }
 
+        $enabled = isset($_POST['_jyotisham_astro_pdf_enabled']) ? 'yes' : 'no';
+
         $report_type = isset($_POST['_jyotisham_astro_pdf_report_type'])
             ? sanitize_key(wp_unslash($_POST['_jyotisham_astro_pdf_report_type']))
             : $product->get_meta('_jyotisham_astro_pdf_report_type', true);
@@ -118,6 +132,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
             $report_slug = $report_type;
         }
 
+        $product->update_meta_data('_jyotisham_astro_pdf_enabled', $enabled);
         $product->update_meta_data('_jyotisham_astro_pdf_report_type', $report_type);
         $product->update_meta_data('_jyotisham_astro_pdf_report_slug', $report_slug);
     }
@@ -680,6 +695,15 @@ class Jyotisham_Astro_PDF_WooCommerce {
 
     private function is_astro_pdf_product($product) {
         if (!$product) {
+            return false;
+        }
+
+        $enabled = $product->get_meta('_jyotisham_astro_pdf_enabled', true);
+        if ($enabled === 'yes') {
+            return true;
+        }
+
+        if ($enabled === 'no') {
             return false;
         }
 

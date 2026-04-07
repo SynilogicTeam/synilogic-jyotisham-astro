@@ -146,8 +146,13 @@ class Jyotisham_Astro_PDF_Frontend {
             return false;
         }
 
-        if ($product->get_meta('_jyotisham_astro_pdf_enabled', true) === 'yes') {
+        $enabled = $product->get_meta('_jyotisham_astro_pdf_enabled', true);
+        if ($enabled === 'yes') {
             return true;
+        }
+
+        if ($enabled === 'no') {
+            return false;
         }
 
         $report_slug = $product->get_meta('_jyotisham_astro_pdf_report_slug', true);
