@@ -64,7 +64,7 @@ class Jyotisham_Admin {
         register_setting('jyotisham_settings', 'jyotisham_enable_astro_pdf', array(
             'type' => 'string',
             'sanitize_callback' => array($this, 'sanitize_checkbox_value'),
-            'default' => '1'
+            'default' => '0'
         ));
         
         add_settings_section(
@@ -151,8 +151,9 @@ class Jyotisham_Admin {
         $api_key = get_option('jyotisham_api_key', '');
         $google_maps_key = get_option('jyotisham_google_maps_key', '');
         $api_status = get_option('jyotisham_api_status', 'disconnected');
-        $enable_astro_pdf = get_option('jyotisham_enable_astro_pdf', '1');
+        $enable_astro_pdf = get_option('jyotisham_enable_astro_pdf', '0');
         $woocommerce_installed = class_exists('WooCommerce');
+        $enable_astro_pdf_checked = $woocommerce_installed ? $enable_astro_pdf : '0';
         ?>
         <div class="wrap">
             <h1>Astro API By Synilogic Settings</h1>
@@ -210,10 +211,16 @@ class Jyotisham_Admin {
                                                    id="jyotisham_enable_astro_pdf"
                                                    name="jyotisham_enable_astro_pdf"
                                                    value="1"
-                                                   <?php checked($enable_astro_pdf, '1'); ?>
+                                                  <?php checked($enable_astro_pdf_checked, '1'); ?>
                                                    <?php disabled(!$woocommerce_installed); ?> />
                                             Enable Astro PDF Report product options in WooCommerce products.
                                         </label>
+                                        <?php if ($woocommerce_installed) : ?>
+                                            <p class="description" style="margin-top:8px;">
+                                                To fill company details for PDF reports,
+                                                <a href="<?php echo esc_url(admin_url('admin.php?page=jyotisham-astro-pdf-report')); ?>">go to Astro PDF Reports page</a>.
+                                            </p>
+                                        <?php endif; ?>
                                         <?php if (!$woocommerce_installed) : ?>
                                             <p class="description" style="color:#b32d2e; font-weight:600; margin-top:8px;">*You must install Woocommerce Plugin to enable PDF option</p>
                                         <?php endif; ?>

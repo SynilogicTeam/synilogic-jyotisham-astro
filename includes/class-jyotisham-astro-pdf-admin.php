@@ -85,6 +85,9 @@ class Jyotisham_Astro_PDF_Admin {
         $company_phone = get_option('jyotisham_pdf_company_phone', '');
         $company_website = get_option('jyotisham_pdf_company_website', '');
         $watermark_enabled = get_option('jyotisham_pdf_watermark_enabled', '0');
+        $astro_pdf_option_enabled = get_option('jyotisham_enable_astro_pdf', '1') === '1';
+        $woocommerce_installed = class_exists('WooCommerce');
+        $astro_pdf_enabled = $astro_pdf_option_enabled && $woocommerce_installed;
         ?>
         <div class="wrap">
             <h1>Astro PDF Reports</h1>
@@ -133,6 +136,15 @@ class Jyotisham_Astro_PDF_Admin {
                 <div class="jyotisham-admin-sidebar">
                     <div class="jyotisham-info-card">
                         <h3>PDF Profile Summary</h3>
+                        <p>
+                            <strong>Astro PDF Report:</strong>
+                            <span class="jyotisham-status-badge <?php echo $astro_pdf_enabled ? 'jyotisham-status-connected' : 'jyotisham-status-disconnected'; ?>">
+                                <?php echo $astro_pdf_enabled ? 'Enabled' : 'Disabled'; ?>
+                            </span>
+                        </p>
+                        <?php if (!$woocommerce_installed) : ?>
+                            <p><em>WooCommerce not installed.</em></p>
+                        <?php endif; ?>
                         <p><strong>Company:</strong> <?php echo esc_html(!empty($company_name) ? $company_name : 'Not set'); ?></p>
                         <p><strong>Email:</strong> <?php echo esc_html(!empty($company_email) ? $company_email : 'Not set'); ?></p>
                         <p><strong>Phone:</strong> <?php echo esc_html(!empty($company_phone) ? $company_phone : 'Not set'); ?></p>
