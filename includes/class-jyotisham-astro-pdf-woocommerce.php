@@ -431,6 +431,10 @@ class Jyotisham_Astro_PDF_WooCommerce {
             $order->update_meta_data('_jyotisham_astro_pdf_reports', $updated_reports);
             $order->save();
         }
+
+        if (!empty($updated_reports)) {
+            $this->maybe_send_report_ready_email($order, $updated_reports);
+        }
     }
 
     public function render_download_links($order_id) {
@@ -824,10 +828,10 @@ class Jyotisham_Astro_PDF_WooCommerce {
         $this->download_styles_printed = true;
 
         echo '<style>';
-        echo '.jyotisham-astro-pdf-downloads{margin:24px 0;padding:22px;border:1px solid #e7e7e7;border-radius:14px;background:linear-gradient(145deg,#ffffff,#f7fafc)}';
-        echo '.jyotisham-astro-pdf-downloads h2{margin:0 0 14px;font-size:28px;line-height:1.2;color:#111827}';
-        echo '.jyotisham-astro-pdf-download-button{display:inline-block;padding:12px 24px;border-radius:999px;background:#0f172a;color:#fff !important;font-weight:600;letter-spacing:.02em;border:0;box-shadow:0 10px 24px rgba(15,23,42,.2);text-decoration:none !important;transition:none}';
-        echo '.jyotisham-astro-pdf-download-button:hover,.jyotisham-astro-pdf-download-button:focus{color:#fff !important;text-decoration:none !important;transform:none;box-shadow:0 10px 24px rgba(15,23,42,.2)}';
+        echo '.jyotisham-astro-pdf-downloads{margin:24px 0;padding:24px;border:1px solid #dbe4f0;border-radius:18px;background:linear-gradient(145deg,#ffffff,#f8fbff);box-shadow:0 16px 36px rgba(15,23,42,.08)}';
+        echo '.jyotisham-astro-pdf-downloads h2{margin:0 0 16px;font-size:28px;line-height:1.2;color:#0f172a;font-weight:800;letter-spacing:-.02em}';
+        echo '.jyotisham-astro-pdf-download-button{display:inline-block;padding:14px 24px;border-radius:999px;background:linear-gradient(135deg,#0f172a,#2563eb);color:#fff !important;font-weight:700;letter-spacing:.01em;border:0;box-shadow:0 14px 28px rgba(37,99,235,.24);text-decoration:none !important;transition:none}';
+        echo '.jyotisham-astro-pdf-download-button:hover,.jyotisham-astro-pdf-download-button:focus{color:#fff !important;text-decoration:none !important;transform:none;box-shadow:0 14px 28px rgba(37,99,235,.24)}';
         echo '.jyotisham-astro-pdf-item-details{margin-top:8px;padding:10px 12px;border:1px solid #ececec;border-radius:10px;background:#fcfcfc}';
         echo '.jyotisham-astro-pdf-item-details strong{display:block;margin-bottom:8px;font-size:16px}';
         echo '.jyotisham-astro-pdf-item-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px}';
@@ -868,5 +872,128 @@ class Jyotisham_Astro_PDF_WooCommerce {
         );
 
         return isset($map[$style]) ? $map[$style] : ucwords((string) $style);
+    }
+
+    private function get_email_logo_url() {
+        $custom_logo_id = (int) get_theme_mod('custom_logo');
+        if ($custom_logo_id > 0) {
+            $logo_url = wp_get_attachment_image_url($custom_logo_id, 'full');
+            if (!empty($logo_url)) {
+                return $logo_url;
+            }
+        }
+
+        return '';
+    }
+
+    private function maybe_send_report_ready_email($order, array $reports) {
+        if (!$order || $this->is_cod_order($order)) {
+            return;
+        }
+
+        if (!function_exists('wc_mail')) {
+            return;
+        }
+
+        $recipient = $order->get_billing_email();
+        if (empty($recipient) || !is_email($recipient)) {
+            return;
+        }
+
+        $download_reports = array_values(array_filter($reports, static function ($report) {
+            return !empty($report['download_url']);
+        }));
+
+        if (empty($download_reports)) {
+            return;
+        }
+
+        $download_urls = array();
+        foreach ($download_reports as $report) {
+            $download_urls[] = (string) $report['download_url'];
+        }
+        sort($download_urls);
+
+        $current_hash = md5(wp_json_encode($download_urls));
+        $last_hash = $order->get_meta('_jyotisham_astro_pdf_email_hash', true);
+
+        if (!empty($last_hash) && hash_equals((string) $last_hash, (string) $current_hash)) {
+            return;
+        }
+
+        $customer_name = trim((string) $order->get_billing_first_name());
+        $subject = sprintf(__('Your Astro PDF report is ready - Order #%s', 'synilogic-jyotisham-astro'), $order->get_order_number());
+
+        $brand_name = get_bloginfo('name');
+        $logo_url = $this->get_email_logo_url();
+        $primary_report_name = !empty($download_reports[0]['report_slug']) ? $this->format_report_name($download_reports[0]['report_slug']) : __('Astro PDF Report', 'synilogic-jyotisham-astro');
+        $first_download_url = isset($download_reports[0]['download_url']) ? $download_reports[0]['download_url'] : '';
+
+        $message = '<!doctype html><html><body style="margin:0;padding:0;background:#f3f6fb;font-family:Arial,Helvetica,sans-serif;">';
+        $message .= '<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f3f6fb;padding:32px 0;">';
+        $message .= '<tr><td align="center">';
+        $message .= '<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="640" style="width:640px;max-width:94%;background:#ffffff;border:1px solid #dce5f2;border-radius:18px;overflow:hidden;box-shadow:0 16px 40px rgba(15,23,42,.08);">';
+
+        $message .= '<tr><td style="padding:28px 28px 22px;background:linear-gradient(135deg,#0f172a,#2563eb);color:#ffffff;text-align:center;">';
+        if (!empty($logo_url)) {
+            $message .= '<img src="' . esc_url($logo_url) . '" alt="' . esc_attr($brand_name) . '" style="max-width:140px;height:auto;display:block;margin:0 auto 14px;">';
+        }
+        $message .= '<div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.82;margin-bottom:6px;">' . esc_html__('Report Ready', 'synilogic-jyotisham-astro') . '</div>';
+        $message .= '<h1 style="margin:0;font-size:30px;line-height:1.25;font-weight:800;color:#ffffff;">' . esc_html(sprintf(__('Your Astro PDF Report is Ready - Order #%s', 'synilogic-jyotisham-astro'), $order->get_order_number())) . '</h1>';
+        $message .= '</td></tr>';
+
+        $message .= '<tr><td style="padding:30px 32px 8px;color:#0f172a;font-size:16px;line-height:1.8;">';
+        $message .= '<p style="margin:0 0 14px;">' . sprintf(
+            esc_html__('Dear %s,', 'synilogic-jyotisham-astro'),
+            esc_html($customer_name !== '' ? $customer_name : __('Customer', 'synilogic-jyotisham-astro'))
+        ) . '</p>';
+        $message .= '<p style="margin:0 0 22px;color:#334155;">' . esc_html__('Your report has been generated successfully. You can download it using the secure button below.', 'synilogic-jyotisham-astro') . '</p>';
+        $message .= '</td></tr>';
+
+        $message .= '<tr><td style="padding:0 32px 10px;">';
+        $message .= '<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border:1px solid #dbe4f0;border-radius:14px;overflow:hidden;background:#f8fbff;">';
+        $message .= '<tr><td style="padding:16px 18px 10px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#64748b;">' . esc_html__('Report Name', 'synilogic-jyotisham-astro') . '</td></tr>';
+        $message .= '<tr><td style="padding:0 18px 16px;font-size:18px;font-weight:700;color:#111827;">' . esc_html($primary_report_name) . '</td></tr>';
+        $message .= '</table>';
+        $message .= '</td></tr>';
+
+        $message .= '<tr><td style="padding:10px 32px 24px;color:#334155;font-size:15px;line-height:1.75;">';
+        $message .= '<p style="margin:0 0 18px;">' . esc_html__('Click the button below to access your report.', 'synilogic-jyotisham-astro') . '</p>';
+        $message .= '<table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 22px;">';
+        $message .= '<tr><td align="center" style="border-radius:999px;background:linear-gradient(135deg,#f97316,#ef4444);">';
+        $message .= '<a href="' . esc_url($first_download_url) . '" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:15px 28px;color:#ffffff !important;text-decoration:none !important;font-size:16px;font-weight:700;border-radius:999px;">' . esc_html__('Download Your Report', 'synilogic-jyotisham-astro') . '</a>';
+        $message .= '</td></tr></table>';
+
+        $message .= '<div style="font-size:13px;line-height:1.7;color:#64748b;padding-top:6px;">' . esc_html__('If the button does not work, copy and paste the link below into your browser:', 'synilogic-jyotisham-astro') . '</div>';
+        $message .= '<div style="margin-top:10px;padding:14px 16px;border:1px solid #dbe4f0;border-radius:12px;background:#ffffff;word-break:break-all;">';
+        $message .= '<a href="' . esc_url($first_download_url) . '" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;font-size:14px;line-height:1.6;">' . esc_html($first_download_url) . '</a>';
+        $message .= '</div>';
+
+        if (count($download_reports) > 1) {
+            $message .= '<div style="margin-top:22px;padding-top:18px;border-top:1px solid #e2e8f0;">';
+            $message .= '<div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#64748b;margin-bottom:10px;">' . esc_html__('Other Downloads', 'synilogic-jyotisham-astro') . '</div>';
+            foreach ($download_reports as $index => $report) {
+                if ($index === 0) {
+                    continue;
+                }
+                $extra_name = !empty($report['report_slug']) ? $this->format_report_name($report['report_slug']) : __('Download PDF', 'synilogic-jyotisham-astro');
+                $message .= '<div style="margin-bottom:8px;"><a href="' . esc_url($report['download_url']) . '" target="_blank" rel="noopener noreferrer" style="color:#0f172a;font-weight:600;text-decoration:none;">' . esc_html($extra_name) . '</a></div>';
+            }
+            $message .= '</div>';
+        }
+
+        $message .= '</td></tr>';
+        $message .= '<tr><td style="padding:22px 32px 28px;border-top:1px solid #e2e8f0;color:#64748b;font-size:13px;line-height:1.8;text-align:center;">';
+        $message .= esc_html__('If you have any questions or need assistance, please contact us. This is an automated message, please do not reply.', 'synilogic-jyotisham-astro');
+        $message .= '</td></tr>';
+        $message .= '</table></td></tr></table></body></html>';
+
+        $headers = array('Content-Type: text/html; charset=UTF-8');
+        $sent = wc_mail($recipient, $subject, $message, $headers);
+
+        if ($sent) {
+            $order->update_meta_data('_jyotisham_astro_pdf_email_hash', $current_hash);
+            $order->save();
+        }
     }
 }
