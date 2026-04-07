@@ -727,7 +727,6 @@ class Jyotisham_Astro_PDF_WooCommerce {
             'report_type' => !empty($stored_data['report_type']) ? $stored_data['report_type'] : $item->get_meta('_jyotisham_astro_pdf_report_type', true),
             'lang' => isset($stored_data['lang']) ? $stored_data['lang'] : 'en',
             'style' => isset($stored_data['style']) ? $stored_data['style'] : 'north',
-            'watermark' => $this->api->get_watermark_text(),
         );
 
         return $this->api->build_request_payload($stored_data, $company_data, $extra_data);

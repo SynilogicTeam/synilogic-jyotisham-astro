@@ -298,7 +298,7 @@ class Jyotisham_Admin {
                 <table class="widefat striped jyotisham-shortcodes-table">
                     <thead>
                         <tr>
-                            <th scope="col">API Name</th>
+                            <th scope="col">Shortcode Name</th>
                             <th scope="col">Description</th>
                             <th scope="col">Plugin Shortcode</th>
                         </tr>

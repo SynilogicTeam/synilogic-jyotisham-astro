@@ -95,14 +95,8 @@ class Jyotisham_Astro_PDF_API {
             'tz' => $timezone,
             'lang' => isset($user_data['lang']) ? sanitize_text_field($user_data['lang']) : 'en',
             'style' => isset($user_data['style']) ? sanitize_text_field($user_data['style']) : 'north',
+            'watermark' => $this->is_watermark_enabled() ? 'true' : 'false',
         ), $this->sanitize_payload($company_data), $this->sanitize_payload($extra_data));
-
-        if ($this->is_watermark_enabled()) {
-            $payload['watermark'] = $this->get_watermark_text();
-            $payload['watermark_enabled'] = '1';
-        } else {
-            $payload['watermark_enabled'] = '0';
-        }
 
         return array_filter($payload, static function ($value) {
             return $value !== '' && $value !== null;
@@ -121,10 +115,6 @@ class Jyotisham_Astro_PDF_API {
 
     public function is_watermark_enabled() {
         return get_option('jyotisham_pdf_watermark_enabled', '0') === '1';
-    }
-
-    public function get_watermark_text() {
-        return get_option('jyotisham_pdf_watermark_text', '');
     }
 
     private function sanitize_payload(array $payload) {

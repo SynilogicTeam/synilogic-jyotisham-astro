@@ -55,6 +55,19 @@
   min-width: 120px;
 }
 
+.jyotisham-watermark-callout {
+  margin: 12px 0 0;
+  text-align: right;
+  font-weight: 700;
+  color: #000;
+}
+
+.jyotisham-watermark-callout a {
+  color: #2271b1;
+  text-decoration: underline;
+  font-weight: 700;
+}
+
 /* Status Indicator */
 .jyotisham-status-indicator {
   display: flex;

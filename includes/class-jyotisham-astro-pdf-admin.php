@@ -35,7 +35,6 @@ class Jyotisham_Astro_PDF_Admin {
             'jyotisham_pdf_company_phone' => array('sanitize_text_field', ''),
             'jyotisham_pdf_company_website' => array('esc_url_raw', ''),
             'jyotisham_pdf_watermark_enabled' => array(array($this, 'sanitize_checkbox'), '0'),
-            'jyotisham_pdf_watermark_text' => array('sanitize_text_field', ''),
         );
 
         foreach ($settings as $option => $config) {
@@ -48,7 +47,7 @@ class Jyotisham_Astro_PDF_Admin {
 
         add_settings_section(
             'jyotisham_pdf_company_section',
-            'Company Details',
+            '',
             '__return_false',
             'jyotisham_pdf_settings'
         );
@@ -80,14 +79,78 @@ class Jyotisham_Astro_PDF_Admin {
         if (!current_user_can('manage_options')) {
             return;
         }
+
+        $company_name = get_option('jyotisham_pdf_company_name', '');
+        $company_email = get_option('jyotisham_pdf_company_email', '');
+        $company_phone = get_option('jyotisham_pdf_company_phone', '');
+        $company_website = get_option('jyotisham_pdf_company_website', '');
+        $watermark_enabled = get_option('jyotisham_pdf_watermark_enabled', '0');
         ?>
         <div class="wrap">
             <h1>Astro PDF Reports</h1>
-            <form method="post" action="options.php">
-                <?php settings_fields('jyotisham_pdf_settings'); ?>
-                <?php do_settings_sections('jyotisham_pdf_settings'); ?>
-                <?php submit_button('Save Settings'); ?>
-            </form>
+
+            <div class="jyotisham-admin-container">
+                <div class="jyotisham-admin-main">
+                    <form method="post" action="options.php">
+                        <?php settings_fields('jyotisham_pdf_settings'); ?>
+
+                        <div class="jyotisham-settings-card">
+                            <h2>Company Details</h2>
+                            <table class="form-table">
+                                <?php do_settings_fields('jyotisham_pdf_settings', 'jyotisham_pdf_company_section'); ?>
+                            </table>
+
+                            <table class="form-table">
+                                <tr>
+                                    <th scope="row">
+                                        <label for="jyotisham_pdf_watermark_enabled">Enable Watermark</label>
+                                    </th>
+                                    <td>
+                                        <label>
+                                            <input type="checkbox"
+                                                   id="jyotisham_pdf_watermark_enabled"
+                                                   name="jyotisham_pdf_watermark_enabled"
+                                                   value="1"
+                                                   <?php checked($watermark_enabled, '1'); ?> />
+                                            Show watermark on generated PDFs
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p class="jyotisham-watermark-callout">
+                                *Add your logo and watermark on :-
+                                <a href="https://jyotishamastroapi.com" target="_blank" rel="noopener noreferrer"><strong>jyotishamastroapi.com</strong></a>
+                            </p>
+
+                            <div class="jyotisham-actions">
+                                <?php submit_button('Save Settings', 'button button-primary', 'submit', false); ?>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="jyotisham-admin-sidebar">
+                    <div class="jyotisham-info-card">
+                        <h3>PDF Profile Summary</h3>
+                        <p><strong>Company:</strong> <?php echo esc_html(!empty($company_name) ? $company_name : 'Not set'); ?></p>
+                        <p><strong>Email:</strong> <?php echo esc_html(!empty($company_email) ? $company_email : 'Not set'); ?></p>
+                        <p><strong>Phone:</strong> <?php echo esc_html(!empty($company_phone) ? $company_phone : 'Not set'); ?></p>
+                        <p><strong>Website:</strong> <?php echo esc_html(!empty($company_website) ? $company_website : 'Not set'); ?></p>
+                        <p><strong>Watermark:</strong> <?php echo esc_html($watermark_enabled === '1' ? 'Enabled' : 'Disabled'); ?></p>
+                    </div>
+
+                    <div class="jyotisham-info-card">
+                        <h3>How It Works</h3>
+                        <ol>
+                            <li>Add company details on this page.</li>
+                            <li>Save settings to apply them to generated reports.</li>
+                            <li>Create WooCommerce products with Astro PDF Report enabled.</li>
+                            <li>Customer reports will use this company profile data.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
         </div>
         <?php
     }
