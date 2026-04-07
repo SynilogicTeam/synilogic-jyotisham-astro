@@ -82,43 +82,43 @@ class Jyotisham_Astro_PDF_Frontend {
         <div class="jyotisham-astro-pdf-form-wrap" data-jyotisham-astro-pdf-form>
             <h3><?php echo esc_html__('Report Details', 'synilogic-jyotisham-astro'); ?></h3>
 
-            <div class="jyotisham-astro-pdf-grid">
-                <p class="form-row form-row-first">
+            <div class="jyotisham-astro-pdf-fields">
+                <div class="jyotisham-astro-pdf-field">
                     <label for="jyotisham_astro_pdf_name"><?php echo esc_html__('Birth Name', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
-                    <input type="text" id="jyotisham_astro_pdf_name" name="jyotisham_astro_pdf_name" required />
-                </p>
+                    <input type="text" id="jyotisham_astro_pdf_name" name="jyotisham_astro_pdf_name" placeholder="Enter your name" required />
+                </div>
 
-                <p class="form-row form-row-last">
+                <div class="jyotisham-astro-pdf-field">
                     <label for="jyotisham_astro_pdf_date"><?php echo esc_html__('Birth Date', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
                     <input type="date" id="jyotisham_astro_pdf_date" name="jyotisham_astro_pdf_date" required />
-                </p>
+                </div>
 
-                <p class="form-row form-row-first">
+                <div class="jyotisham-astro-pdf-field">
                     <label for="jyotisham_astro_pdf_time"><?php echo esc_html__('Birth Time', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
                     <input type="time" id="jyotisham_astro_pdf_time" name="jyotisham_astro_pdf_time" required />
-                </p>
+                </div>
 
-                <p class="form-row form-row-last">
+                <div class="jyotisham-astro-pdf-field">
                     <label for="jyotisham_astro_pdf_place"><?php echo esc_html__('Birth Place', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
                     <input type="text" id="jyotisham_astro_pdf_place" name="jyotisham_astro_pdf_place" autocomplete="off" placeholder="<?php echo esc_attr__('Search a place', 'synilogic-jyotisham-astro'); ?>" required />
-                </p>
+                </div>
 
-                <p class="form-row form-row-first">
+                <div class="jyotisham-astro-pdf-field">
                     <label for="jyotisham_astro_pdf_language"><?php echo esc_html__('Language', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
                     <select id="jyotisham_astro_pdf_language" name="jyotisham_astro_pdf_language" required>
                         <option value="en"><?php echo esc_html__('English', 'synilogic-jyotisham-astro'); ?></option>
                         <option value="hi"><?php echo esc_html__('Hindi', 'synilogic-jyotisham-astro'); ?></option>
                     </select>
-                </p>
+                </div>
 
-                <p class="form-row form-row-last">
+                <div class="jyotisham-astro-pdf-field">
                     <label for="jyotisham_astro_pdf_style"><?php echo esc_html__('Chart Style', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
                     <select id="jyotisham_astro_pdf_style" name="jyotisham_astro_pdf_style" required>
                         <option value="north"><?php echo esc_html__('North Indian', 'synilogic-jyotisham-astro'); ?></option>
                         <option value="south"><?php echo esc_html__('South Indian', 'synilogic-jyotisham-astro'); ?></option>
                         <option value="east"><?php echo esc_html__('East Indian', 'synilogic-jyotisham-astro'); ?></option>
                     </select>
-                </p>
+                </div>
             </div>
 
             <input type="hidden" id="jyotisham_astro_pdf_latitude" name="jyotisham_astro_pdf_latitude" />
