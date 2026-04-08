@@ -666,6 +666,9 @@ class Jyotisham_Astro_PDF_WooCommerce {
             'wellness_guide' => __('Wellness Guide', 'synilogic-jyotisham-astro'),
             'life_direction_report_2026' => __('Life Direction Report 2026', 'synilogic-jyotisham-astro'),
             'personal_empowerment_report' => __('Personal Empowerment Report', 'synilogic-jyotisham-astro'),
+            'kundali_small' => __('Kundali (Small)', 'synilogic-jyotisham-astro'),
+            'kundali_medium' => __('Kundali (Medium)', 'synilogic-jyotisham-astro'),
+            'kundali_large' => __('Kundali (Large)', 'synilogic-jyotisham-astro'),
             'custom' => __('Custom', 'synilogic-jyotisham-astro'),
         );
     }

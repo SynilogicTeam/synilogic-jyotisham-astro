@@ -31,7 +31,20 @@ class Jyotisham_Astro_PDF_API {
             return new WP_Error('jyotisham_pdf_missing_slug', 'Report slug is required.');
         }
 
-        $url = trailingslashit($this->base_url) . 'api/pdf/' . rawurlencode($report_slug);
+        $kundali_pdf_type_map = array(
+            'kundali_small' => 'small',
+            'kundali_medium' => 'medium',
+            'kundali_large' => 'large',
+        );
+
+        if (isset($kundali_pdf_type_map[$report_slug])) {
+            $payload['pdf_type'] = $kundali_pdf_type_map[$report_slug];
+            unset($payload['report_slug']);
+            $url = trailingslashit($this->base_url) . 'api/pdf/generate';
+        } else {
+            $url = trailingslashit($this->base_url) . 'api/pdf/' . rawurlencode($report_slug);
+        }
+
         $url = add_query_arg($this->sanitize_payload($payload), $url);
 
         $response = wp_remote_get($url, array(
