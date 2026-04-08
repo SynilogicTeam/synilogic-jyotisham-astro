@@ -679,7 +679,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
                     continue;
                 }
                 echo '<li class="jyotisham-astro-pdf-item-row">';
-                echo '<span class="jyotisham-astro-pdf-item-label">' . esc_html($label) . '</span>';
+                echo '<span class="jyotisham-astro-pdf-item-label">' . esc_html($label . ':') . '</span>';
                 echo '<span class="jyotisham-astro-pdf-item-value">' . esc_html($value) . '</span>';
                 echo '</li>';
             }
@@ -692,7 +692,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
                     continue;
                 }
                 echo '<li class="jyotisham-astro-pdf-item-row">';
-                echo '<span class="jyotisham-astro-pdf-item-label">' . esc_html($label) . '</span>';
+                echo '<span class="jyotisham-astro-pdf-item-label">' . esc_html($label . ':') . '</span>';
                 echo '<span class="jyotisham-astro-pdf-item-value">' . esc_html($value) . '</span>';
                 echo '</li>';
             }
@@ -704,7 +704,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
                     continue;
                 }
                 echo '<li class="jyotisham-astro-pdf-item-row">';
-                echo '<span class="jyotisham-astro-pdf-item-label">' . esc_html($label) . '</span>';
+                echo '<span class="jyotisham-astro-pdf-item-label">' . esc_html($label . ':') . '</span>';
                 echo '<span class="jyotisham-astro-pdf-item-value">' . esc_html($value) . '</span>';
                 echo '</li>';
             }
@@ -733,7 +733,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
             }
 
             echo '<li class="jyotisham-astro-pdf-item-row">';
-            echo '<span class="jyotisham-astro-pdf-item-label">' . esc_html($label) . '</span>';
+            echo '<span class="jyotisham-astro-pdf-item-label">' . esc_html($label . ':') . '</span>';
             echo '<span class="jyotisham-astro-pdf-item-value">' . esc_html($value) . '</span>';
             echo '</li>';
         }
