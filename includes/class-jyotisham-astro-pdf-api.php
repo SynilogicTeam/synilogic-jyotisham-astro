@@ -41,6 +41,9 @@ class Jyotisham_Astro_PDF_API {
             $payload['pdf_type'] = $kundali_pdf_type_map[$report_slug];
             unset($payload['report_slug']);
             $url = trailingslashit($this->base_url) . 'api/pdf/generate';
+        } elseif ($report_slug === 'generate_matching') {
+            unset($payload['report_slug']);
+            $url = trailingslashit($this->base_url) . 'api/pdf/generate_matching';
         } else {
             $url = trailingslashit($this->base_url) . 'api/pdf/' . rawurlencode($report_slug);
         }
@@ -145,7 +148,7 @@ class Jyotisham_Astro_PDF_API {
                 continue;
             }
 
-            if (in_array($key, array('latitude', 'longitude', 'tz', 'price'), true)) {
+            if (in_array($key, array('latitude', 'longitude', 'tz', 'price', 'boy_lat', 'boy_lon', 'boy_tz', 'girl_lat', 'girl_lon', 'girl_tz'), true)) {
                 $clean[$key] = (string) floatval($value);
                 continue;
             }

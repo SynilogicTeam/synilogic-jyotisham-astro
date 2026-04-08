@@ -173,9 +173,15 @@ class Jyotisham_Astro_PDF_WooCommerce {
         }
 
         $data = $this->get_request_data();
+        $is_matching = $this->is_matching_report_data($data);
 
-        if (empty($data['name']) || empty($data['date']) || empty($data['time']) || empty($data['place']) || empty($data['latitude']) || empty($data['longitude']) || empty($data['timezone']) || empty($data['lang']) || empty($data['style'])) {
+        if (!$is_matching && (empty($data['name']) || empty($data['date']) || empty($data['time']) || empty($data['place']) || empty($data['latitude']) || empty($data['longitude']) || empty($data['timezone']) || empty($data['lang']) || empty($data['style']))) {
             wc_add_notice(__('Please fill out the details before to buy the report.', 'synilogic-jyotisham-astro'), 'error');
+            return false;
+        }
+
+        if ($is_matching && (empty($data['boy_name']) || empty($data['boy_dob']) || empty($data['boy_tob']) || empty($data['boy_place']) || empty($data['boy_lat']) || empty($data['boy_lon']) || empty($data['boy_tz']) || empty($data['girl_name']) || empty($data['girl_dob']) || empty($data['girl_tob']) || empty($data['girl_place']) || empty($data['girl_lat']) || empty($data['girl_lon']) || empty($data['girl_tz']) || empty($data['lang']) || empty($data['style']))) {
+            wc_add_notice(__('Please fill out all boy and girl details before buying the matching report.', 'synilogic-jyotisham-astro'), 'error');
             return false;
         }
 
@@ -184,29 +190,64 @@ class Jyotisham_Astro_PDF_WooCommerce {
             return false;
         }
 
-        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $data['date']) && !preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $data['date'])) {
+        if (!$is_matching && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $data['date']) && !preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $data['date'])) {
             wc_add_notice(__('Please enter a valid date.', 'synilogic-jyotisham-astro'), 'error');
             return false;
         }
 
-        if (!preg_match('/^\d{2}:\d{2}$/', $data['time'])) {
+        if ($is_matching) {
+            if ((!preg_match('/^\d{4}-\d{2}-\d{2}$/', $data['boy_dob']) && !preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $data['boy_dob'])) || (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $data['girl_dob']) && !preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $data['girl_dob']))) {
+                wc_add_notice(__('Please enter valid birth dates for both boy and girl.', 'synilogic-jyotisham-astro'), 'error');
+                return false;
+            }
+        }
+
+        if (!$is_matching && !preg_match('/^\d{2}:\d{2}$/', $data['time'])) {
             wc_add_notice(__('Please enter a valid time.', 'synilogic-jyotisham-astro'), 'error');
             return false;
         }
 
-        if (!is_numeric($data['latitude']) || (float) $data['latitude'] < -90 || (float) $data['latitude'] > 90) {
+        if ($is_matching) {
+            if (!preg_match('/^\d{2}:\d{2}$/', $data['boy_tob']) || !preg_match('/^\d{2}:\d{2}$/', $data['girl_tob'])) {
+                wc_add_notice(__('Please enter valid birth times for both boy and girl.', 'synilogic-jyotisham-astro'), 'error');
+                return false;
+            }
+        }
+
+        if (!$is_matching && (!is_numeric($data['latitude']) || (float) $data['latitude'] < -90 || (float) $data['latitude'] > 90)) {
             wc_add_notice(__('Please select a valid latitude.', 'synilogic-jyotisham-astro'), 'error');
             return false;
         }
 
-        if (!is_numeric($data['longitude']) || (float) $data['longitude'] < -180 || (float) $data['longitude'] > 180) {
+        if ($is_matching) {
+            if (!is_numeric($data['boy_lat']) || (float) $data['boy_lat'] < -90 || (float) $data['boy_lat'] > 90 || !is_numeric($data['girl_lat']) || (float) $data['girl_lat'] < -90 || (float) $data['girl_lat'] > 90) {
+                wc_add_notice(__('Please select valid latitudes for both boy and girl.', 'synilogic-jyotisham-astro'), 'error');
+                return false;
+            }
+        }
+
+        if (!$is_matching && (!is_numeric($data['longitude']) || (float) $data['longitude'] < -180 || (float) $data['longitude'] > 180)) {
             wc_add_notice(__('Please select a valid longitude.', 'synilogic-jyotisham-astro'), 'error');
             return false;
         }
 
-        if (!is_numeric($data['timezone']) || (float) $data['timezone'] < -12 || (float) $data['timezone'] > 14) {
+        if ($is_matching) {
+            if (!is_numeric($data['boy_lon']) || (float) $data['boy_lon'] < -180 || (float) $data['boy_lon'] > 180 || !is_numeric($data['girl_lon']) || (float) $data['girl_lon'] < -180 || (float) $data['girl_lon'] > 180) {
+                wc_add_notice(__('Please select valid longitudes for both boy and girl.', 'synilogic-jyotisham-astro'), 'error');
+                return false;
+            }
+        }
+
+        if (!$is_matching && (!is_numeric($data['timezone']) || (float) $data['timezone'] < -12 || (float) $data['timezone'] > 14)) {
             wc_add_notice(__('Please select a valid timezone.', 'synilogic-jyotisham-astro'), 'error');
             return false;
+        }
+
+        if ($is_matching) {
+            if (!is_numeric($data['boy_tz']) || (float) $data['boy_tz'] < -12 || (float) $data['boy_tz'] > 14 || !is_numeric($data['girl_tz']) || (float) $data['girl_tz'] < -12 || (float) $data['girl_tz'] > 14) {
+                wc_add_notice(__('Please select valid timezones for both boy and girl.', 'synilogic-jyotisham-astro'), 'error');
+                return false;
+            }
         }
 
         $allowed_languages = array('en', 'hi');
@@ -232,20 +273,44 @@ class Jyotisham_Astro_PDF_WooCommerce {
         }
 
         $data = $this->get_request_data();
+        $is_matching = $this->is_matching_report_data($data);
 
-        $cart_item_data['jyotisham_astro_pdf'] = array(
-            'name' => $data['name'],
-            'date' => $data['date'],
-            'time' => $data['time'],
-            'place' => $data['place'],
-            'latitude' => $data['latitude'],
-            'longitude' => $data['longitude'],
-            'timezone' => $data['timezone'],
-            'lang' => $data['lang'],
-            'style' => $data['style'],
-            'report_type' => $data['report_type'],
-            'report_slug' => $this->resolve_report_slug($product, $data['report_slug']),
-        );
+        if ($is_matching) {
+            $cart_item_data['jyotisham_astro_pdf'] = array(
+                'boy_name' => $data['boy_name'],
+                'boy_dob' => $data['boy_dob'],
+                'boy_tob' => $data['boy_tob'],
+                'boy_tz' => $data['boy_tz'],
+                'boy_lat' => $data['boy_lat'],
+                'boy_lon' => $data['boy_lon'],
+                'boy_place' => $data['boy_place'],
+                'girl_name' => $data['girl_name'],
+                'girl_dob' => $data['girl_dob'],
+                'girl_tob' => $data['girl_tob'],
+                'girl_tz' => $data['girl_tz'],
+                'girl_lat' => $data['girl_lat'],
+                'girl_lon' => $data['girl_lon'],
+                'girl_place' => $data['girl_place'],
+                'lang' => $data['lang'],
+                'style' => $data['style'],
+                'report_type' => $data['report_type'],
+                'report_slug' => $this->resolve_report_slug($product, $data['report_slug']),
+            );
+        } else {
+            $cart_item_data['jyotisham_astro_pdf'] = array(
+                'name' => $data['name'],
+                'date' => $data['date'],
+                'time' => $data['time'],
+                'place' => $data['place'],
+                'latitude' => $data['latitude'],
+                'longitude' => $data['longitude'],
+                'timezone' => $data['timezone'],
+                'lang' => $data['lang'],
+                'style' => $data['style'],
+                'report_type' => $data['report_type'],
+                'report_slug' => $this->resolve_report_slug($product, $data['report_slug']),
+            );
+        }
 
         $cart_item_data['jyotisham_astro_pdf_unique'] = md5(wp_json_encode($cart_item_data['jyotisham_astro_pdf']) . microtime(true));
 
@@ -258,10 +323,21 @@ class Jyotisham_Astro_PDF_WooCommerce {
         }
 
         $data = $cart_item['jyotisham_astro_pdf'];
-        $item_data[] = array('key' => __('Name', 'synilogic-jyotisham-astro'), 'value' => esc_html($data['name']));
-        $item_data[] = array('key' => __('Date', 'synilogic-jyotisham-astro'), 'value' => esc_html($data['date']));
-        $item_data[] = array('key' => __('Time', 'synilogic-jyotisham-astro'), 'value' => esc_html($data['time']));
-        $item_data[] = array('key' => __('Place', 'synilogic-jyotisham-astro'), 'value' => esc_html($data['place']));
+        if ($this->is_matching_report_data($data)) {
+            $item_data[] = array('key' => __('Boy Name', 'synilogic-jyotisham-astro'), 'value' => esc_html($data['boy_name']));
+            $item_data[] = array('key' => __('Boy Date', 'synilogic-jyotisham-astro'), 'value' => esc_html($data['boy_dob']));
+            $item_data[] = array('key' => __('Boy Time', 'synilogic-jyotisham-astro'), 'value' => esc_html($data['boy_tob']));
+            $item_data[] = array('key' => __('Boy Place', 'synilogic-jyotisham-astro'), 'value' => esc_html($data['boy_place']));
+            $item_data[] = array('key' => __('Girl Name', 'synilogic-jyotisham-astro'), 'value' => esc_html($data['girl_name']));
+            $item_data[] = array('key' => __('Girl Date', 'synilogic-jyotisham-astro'), 'value' => esc_html($data['girl_dob']));
+            $item_data[] = array('key' => __('Girl Time', 'synilogic-jyotisham-astro'), 'value' => esc_html($data['girl_tob']));
+            $item_data[] = array('key' => __('Girl Place', 'synilogic-jyotisham-astro'), 'value' => esc_html($data['girl_place']));
+        } else {
+            $item_data[] = array('key' => __('Name', 'synilogic-jyotisham-astro'), 'value' => esc_html($data['name']));
+            $item_data[] = array('key' => __('Date', 'synilogic-jyotisham-astro'), 'value' => esc_html($data['date']));
+            $item_data[] = array('key' => __('Time', 'synilogic-jyotisham-astro'), 'value' => esc_html($data['time']));
+            $item_data[] = array('key' => __('Place', 'synilogic-jyotisham-astro'), 'value' => esc_html($data['place']));
+        }
         $item_data[] = array('key' => __('Language', 'synilogic-jyotisham-astro'), 'value' => esc_html(isset($data['lang']) ? $data['lang'] : 'en'));
         $item_data[] = array('key' => __('Chart Style', 'synilogic-jyotisham-astro'), 'value' => esc_html(isset($data['style']) ? $data['style'] : 'north'));
 
@@ -284,7 +360,12 @@ class Jyotisham_Astro_PDF_WooCommerce {
 
             $data = $cart_item['jyotisham_astro_pdf'];
 
-            if (empty($data['name']) || empty($data['date']) || empty($data['time']) || empty($data['place']) || empty($data['latitude']) || empty($data['longitude']) || empty($data['timezone']) || empty($data['lang']) || empty($data['style'])) {
+            if ($this->is_matching_report_data($data)) {
+                if (empty($data['boy_name']) || empty($data['boy_dob']) || empty($data['boy_tob']) || empty($data['boy_place']) || empty($data['boy_lat']) || empty($data['boy_lon']) || empty($data['boy_tz']) || empty($data['girl_name']) || empty($data['girl_dob']) || empty($data['girl_tob']) || empty($data['girl_place']) || empty($data['girl_lat']) || empty($data['girl_lon']) || empty($data['girl_tz']) || empty($data['lang']) || empty($data['style'])) {
+                    wc_add_notice(__('Please fill in all matching report details before placing your order.', 'synilogic-jyotisham-astro'), 'error');
+                    break;
+                }
+            } elseif (empty($data['name']) || empty($data['date']) || empty($data['time']) || empty($data['place']) || empty($data['latitude']) || empty($data['longitude']) || empty($data['timezone']) || empty($data['lang']) || empty($data['style'])) {
                 wc_add_notice(__('Please fill in all report details before placing your order.', 'synilogic-jyotisham-astro'), 'error');
                 break;
             }
@@ -344,13 +425,30 @@ class Jyotisham_Astro_PDF_WooCommerce {
         $item->add_meta_data('_jyotisham_astro_pdf', $data, true);
         $item->add_meta_data(__('Astro PDF Report', 'synilogic-jyotisham-astro'), isset($data['report_slug']) ? $data['report_slug'] : '', true);
         $item->add_meta_data('_jyotisham_astro_pdf_report_type', $data['report_type'], true);
-        $item->add_meta_data(__('Birth Name', 'synilogic-jyotisham-astro'), isset($data['name']) ? $data['name'] : '', true);
-        $item->add_meta_data(__('Birth Date', 'synilogic-jyotisham-astro'), isset($data['date']) ? $data['date'] : '', true);
-        $item->add_meta_data(__('Birth Time', 'synilogic-jyotisham-astro'), isset($data['time']) ? $data['time'] : '', true);
-        $item->add_meta_data(__('Birth Place', 'synilogic-jyotisham-astro'), isset($data['place']) ? $data['place'] : '', true);
-        $item->add_meta_data(__('Latitude', 'synilogic-jyotisham-astro'), isset($data['latitude']) ? $data['latitude'] : '', true);
-        $item->add_meta_data(__('Longitude', 'synilogic-jyotisham-astro'), isset($data['longitude']) ? $data['longitude'] : '', true);
-        $item->add_meta_data(__('Timezone', 'synilogic-jyotisham-astro'), isset($data['timezone']) ? $data['timezone'] : '', true);
+        if ($this->is_matching_report_data($data)) {
+            $item->add_meta_data(__('Boy Name', 'synilogic-jyotisham-astro'), isset($data['boy_name']) ? $data['boy_name'] : '', true);
+            $item->add_meta_data(__('Boy Date', 'synilogic-jyotisham-astro'), isset($data['boy_dob']) ? $data['boy_dob'] : '', true);
+            $item->add_meta_data(__('Boy Time', 'synilogic-jyotisham-astro'), isset($data['boy_tob']) ? $data['boy_tob'] : '', true);
+            $item->add_meta_data(__('Boy Place', 'synilogic-jyotisham-astro'), isset($data['boy_place']) ? $data['boy_place'] : '', true);
+            $item->add_meta_data(__('Boy Latitude', 'synilogic-jyotisham-astro'), isset($data['boy_lat']) ? $data['boy_lat'] : '', true);
+            $item->add_meta_data(__('Boy Longitude', 'synilogic-jyotisham-astro'), isset($data['boy_lon']) ? $data['boy_lon'] : '', true);
+            $item->add_meta_data(__('Boy Timezone', 'synilogic-jyotisham-astro'), isset($data['boy_tz']) ? $data['boy_tz'] : '', true);
+            $item->add_meta_data(__('Girl Name', 'synilogic-jyotisham-astro'), isset($data['girl_name']) ? $data['girl_name'] : '', true);
+            $item->add_meta_data(__('Girl Date', 'synilogic-jyotisham-astro'), isset($data['girl_dob']) ? $data['girl_dob'] : '', true);
+            $item->add_meta_data(__('Girl Time', 'synilogic-jyotisham-astro'), isset($data['girl_tob']) ? $data['girl_tob'] : '', true);
+            $item->add_meta_data(__('Girl Place', 'synilogic-jyotisham-astro'), isset($data['girl_place']) ? $data['girl_place'] : '', true);
+            $item->add_meta_data(__('Girl Latitude', 'synilogic-jyotisham-astro'), isset($data['girl_lat']) ? $data['girl_lat'] : '', true);
+            $item->add_meta_data(__('Girl Longitude', 'synilogic-jyotisham-astro'), isset($data['girl_lon']) ? $data['girl_lon'] : '', true);
+            $item->add_meta_data(__('Girl Timezone', 'synilogic-jyotisham-astro'), isset($data['girl_tz']) ? $data['girl_tz'] : '', true);
+        } else {
+            $item->add_meta_data(__('Birth Name', 'synilogic-jyotisham-astro'), isset($data['name']) ? $data['name'] : '', true);
+            $item->add_meta_data(__('Birth Date', 'synilogic-jyotisham-astro'), isset($data['date']) ? $data['date'] : '', true);
+            $item->add_meta_data(__('Birth Time', 'synilogic-jyotisham-astro'), isset($data['time']) ? $data['time'] : '', true);
+            $item->add_meta_data(__('Birth Place', 'synilogic-jyotisham-astro'), isset($data['place']) ? $data['place'] : '', true);
+            $item->add_meta_data(__('Latitude', 'synilogic-jyotisham-astro'), isset($data['latitude']) ? $data['latitude'] : '', true);
+            $item->add_meta_data(__('Longitude', 'synilogic-jyotisham-astro'), isset($data['longitude']) ? $data['longitude'] : '', true);
+            $item->add_meta_data(__('Timezone', 'synilogic-jyotisham-astro'), isset($data['timezone']) ? $data['timezone'] : '', true);
+        }
         $item->add_meta_data(__('Language', 'synilogic-jyotisham-astro'), isset($data['lang']) ? $data['lang'] : 'en', true);
         $item->add_meta_data(__('Chart Style', 'synilogic-jyotisham-astro'), isset($data['style']) ? $data['style'] : 'north', true);
     }
@@ -390,7 +488,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
                     'item_id' => $item_id,
                     'download_url' => $existing_download_url,
                     'report_slug' => $stored_data['report_slug'],
-                    'name' => $stored_data['name'],
+                    'name' => $this->get_report_customer_name($stored_data),
                 );
                 continue;
             }
@@ -422,7 +520,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
                 'item_id' => $item_id,
                 'download_url' => $download_url,
                 'report_slug' => $stored_data['report_slug'],
-                'name' => $stored_data['name'],
+                'name' => $this->get_report_customer_name($stored_data),
             );
             $order_changed = true;
         }
@@ -669,6 +767,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
             'kundali_small' => __('Kundali (Small)', 'synilogic-jyotisham-astro'),
             'kundali_medium' => __('Kundali (Medium)', 'synilogic-jyotisham-astro'),
             'kundali_large' => __('Kundali (Large)', 'synilogic-jyotisham-astro'),
+            'generate_matching' => __('Matching Report', 'synilogic-jyotisham-astro'),
             'custom' => __('Custom', 'synilogic-jyotisham-astro'),
         );
     }
@@ -682,6 +781,20 @@ class Jyotisham_Astro_PDF_WooCommerce {
             'latitude' => isset($_POST['jyotisham_astro_pdf_latitude']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_latitude'])) : '',
             'longitude' => isset($_POST['jyotisham_astro_pdf_longitude']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_longitude'])) : '',
             'timezone' => isset($_POST['jyotisham_astro_pdf_timezone']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_timezone'])) : '',
+            'boy_name' => isset($_POST['jyotisham_astro_pdf_boy_name']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_boy_name'])) : '',
+            'boy_dob' => isset($_POST['jyotisham_astro_pdf_boy_dob']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_boy_dob'])) : '',
+            'boy_tob' => isset($_POST['jyotisham_astro_pdf_boy_tob']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_boy_tob'])) : '',
+            'boy_place' => isset($_POST['jyotisham_astro_pdf_boy_place']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_boy_place'])) : '',
+            'boy_lat' => isset($_POST['jyotisham_astro_pdf_boy_lat']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_boy_lat'])) : '',
+            'boy_lon' => isset($_POST['jyotisham_astro_pdf_boy_lon']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_boy_lon'])) : '',
+            'boy_tz' => isset($_POST['jyotisham_astro_pdf_boy_tz']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_boy_tz'])) : '',
+            'girl_name' => isset($_POST['jyotisham_astro_pdf_girl_name']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_girl_name'])) : '',
+            'girl_dob' => isset($_POST['jyotisham_astro_pdf_girl_dob']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_girl_dob'])) : '',
+            'girl_tob' => isset($_POST['jyotisham_astro_pdf_girl_tob']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_girl_tob'])) : '',
+            'girl_place' => isset($_POST['jyotisham_astro_pdf_girl_place']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_girl_place'])) : '',
+            'girl_lat' => isset($_POST['jyotisham_astro_pdf_girl_lat']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_girl_lat'])) : '',
+            'girl_lon' => isset($_POST['jyotisham_astro_pdf_girl_lon']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_girl_lon'])) : '',
+            'girl_tz' => isset($_POST['jyotisham_astro_pdf_girl_tz']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_girl_tz'])) : '',
             'lang' => isset($_POST['jyotisham_astro_pdf_language']) ? sanitize_key(wp_unslash($_POST['jyotisham_astro_pdf_language'])) : 'en',
             'style' => isset($_POST['jyotisham_astro_pdf_style']) ? sanitize_key(wp_unslash($_POST['jyotisham_astro_pdf_style'])) : 'north',
             'report_type' => isset($_POST['jyotisham_astro_pdf_report_type']) ? sanitize_key(wp_unslash($_POST['jyotisham_astro_pdf_report_type'])) : '',
@@ -724,6 +837,33 @@ class Jyotisham_Astro_PDF_WooCommerce {
     }
 
     private function build_pdf_payload($order, array $stored_data, $item) {
+        if ($this->is_matching_report_data($stored_data)) {
+            return array(
+                'boy_name' => isset($stored_data['boy_name']) ? $stored_data['boy_name'] : '',
+                'boy_dob' => isset($stored_data['boy_dob']) ? $this->normalize_date_for_api($stored_data['boy_dob']) : '',
+                'boy_tob' => isset($stored_data['boy_tob']) ? $stored_data['boy_tob'] : '',
+                'boy_tz' => isset($stored_data['boy_tz']) ? $stored_data['boy_tz'] : '',
+                'boy_lat' => isset($stored_data['boy_lat']) ? $stored_data['boy_lat'] : '',
+                'boy_lon' => isset($stored_data['boy_lon']) ? $stored_data['boy_lon'] : '',
+                'boy_place' => isset($stored_data['boy_place']) ? $stored_data['boy_place'] : '',
+                'girl_name' => isset($stored_data['girl_name']) ? $stored_data['girl_name'] : '',
+                'girl_dob' => isset($stored_data['girl_dob']) ? $this->normalize_date_for_api($stored_data['girl_dob']) : '',
+                'girl_tob' => isset($stored_data['girl_tob']) ? $stored_data['girl_tob'] : '',
+                'girl_tz' => isset($stored_data['girl_tz']) ? $stored_data['girl_tz'] : '',
+                'girl_lat' => isset($stored_data['girl_lat']) ? $stored_data['girl_lat'] : '',
+                'girl_lon' => isset($stored_data['girl_lon']) ? $stored_data['girl_lon'] : '',
+                'girl_place' => isset($stored_data['girl_place']) ? $stored_data['girl_place'] : '',
+                'lang' => isset($stored_data['lang']) ? $stored_data['lang'] : 'en',
+                'style' => isset($stored_data['style']) ? $stored_data['style'] : 'north',
+                'company_name' => get_option('jyotisham_pdf_company_name', ''),
+                'company_address' => get_option('jyotisham_pdf_company_address', ''),
+                'company_email' => get_option('jyotisham_pdf_company_email', ''),
+                'company_phone' => get_option('jyotisham_pdf_company_phone', ''),
+                'company_website' => get_option('jyotisham_pdf_company_website', ''),
+                'watermark' => $this->api->is_watermark_enabled() ? 'true' : 'false',
+            );
+        }
+
         $company_data = $this->api->get_company_payload();
 
         $extra_data = array(
@@ -759,7 +899,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
                 'item_id' => $item_id,
                 'download_url' => $download_url,
                 'report_slug' => $stored_data['report_slug'],
-                'name' => $stored_data['name'],
+                'name' => $this->get_report_customer_name($stored_data),
             );
         }
 
@@ -774,6 +914,45 @@ class Jyotisham_Astro_PDF_WooCommerce {
         }
 
         return false;
+    }
+
+    private function is_matching_report_data(array $data) {
+        $slug = isset($data['report_slug']) ? sanitize_title((string) $data['report_slug']) : '';
+        $type = isset($data['report_type']) ? sanitize_title((string) $data['report_type']) : '';
+
+        return $slug === 'generate_matching' || $type === 'generate_matching';
+    }
+
+    private function get_report_customer_name(array $stored_data) {
+        if (!empty($stored_data['name'])) {
+            return $stored_data['name'];
+        }
+
+        if (!empty($stored_data['boy_name']) || !empty($stored_data['girl_name'])) {
+            $boy = !empty($stored_data['boy_name']) ? $stored_data['boy_name'] : __('Boy', 'synilogic-jyotisham-astro');
+            $girl = !empty($stored_data['girl_name']) ? $stored_data['girl_name'] : __('Girl', 'synilogic-jyotisham-astro');
+
+            return sprintf('%s & %s', $boy, $girl);
+        }
+
+        return '';
+    }
+
+    private function normalize_date_for_api($date_value) {
+        $date_value = sanitize_text_field((string) $date_value);
+
+        if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $date_value)) {
+            return $date_value;
+        }
+
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $date_value)) {
+            $timestamp = strtotime($date_value);
+            if ($timestamp) {
+                return gmdate('d/m/Y', $timestamp);
+            }
+        }
+
+        return $date_value;
     }
 
     private function cart_has_report_products() {

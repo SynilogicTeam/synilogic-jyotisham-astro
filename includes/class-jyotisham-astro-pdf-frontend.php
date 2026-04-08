@@ -77,31 +77,75 @@ class Jyotisham_Astro_PDF_Frontend {
         $product_id = $product->get_id();
         $report_type = get_post_meta($product_id, '_jyotisham_astro_pdf_report_type', true);
         $report_slug = get_post_meta($product_id, '_jyotisham_astro_pdf_report_slug', true);
+        $effective_report_slug = !empty($report_slug) ? sanitize_title($report_slug) : sanitize_title($report_type);
+        $is_matching_report = ($effective_report_slug === 'generate_matching');
         $google_maps_key = $this->maps->get_google_maps_key();
         ?>
-        <div class="jyotisham-astro-pdf-form-wrap" data-jyotisham-astro-pdf-form>
+        <div class="jyotisham-astro-pdf-form-wrap" data-jyotisham-astro-pdf-form data-report-mode="<?php echo esc_attr($is_matching_report ? 'matching' : 'single'); ?>">
             <h3><?php echo esc_html__('Report Details', 'synilogic-jyotisham-astro'); ?></h3>
 
             <div class="jyotisham-astro-pdf-fields">
-                <div class="jyotisham-astro-pdf-field">
-                    <label for="jyotisham_astro_pdf_name"><?php echo esc_html__('Birth Name', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
-                    <input type="text" id="jyotisham_astro_pdf_name" name="jyotisham_astro_pdf_name" placeholder="Enter your name" required />
-                </div>
+                <?php if ($is_matching_report): ?>
+                    <div class="jyotisham-astro-pdf-field">
+                        <label for="jyotisham_astro_pdf_boy_name"><?php echo esc_html__('Boy Name', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
+                        <input type="text" id="jyotisham_astro_pdf_boy_name" name="jyotisham_astro_pdf_boy_name" placeholder="<?php echo esc_attr__('Enter boy name', 'synilogic-jyotisham-astro'); ?>" required />
+                    </div>
 
-                <div class="jyotisham-astro-pdf-field">
-                    <label for="jyotisham_astro_pdf_date"><?php echo esc_html__('Birth Date', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
-                    <input type="date" id="jyotisham_astro_pdf_date" name="jyotisham_astro_pdf_date" required />
-                </div>
+                    <div class="jyotisham-astro-pdf-field">
+                        <label for="jyotisham_astro_pdf_boy_dob"><?php echo esc_html__('Boy Birth Date', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
+                        <input type="date" id="jyotisham_astro_pdf_boy_dob" name="jyotisham_astro_pdf_boy_dob" required />
+                    </div>
 
-                <div class="jyotisham-astro-pdf-field">
-                    <label for="jyotisham_astro_pdf_time"><?php echo esc_html__('Birth Time', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
-                    <input type="time" id="jyotisham_astro_pdf_time" name="jyotisham_astro_pdf_time" required />
-                </div>
+                    <div class="jyotisham-astro-pdf-field">
+                        <label for="jyotisham_astro_pdf_boy_tob"><?php echo esc_html__('Boy Birth Time', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
+                        <input type="time" id="jyotisham_astro_pdf_boy_tob" name="jyotisham_astro_pdf_boy_tob" required />
+                    </div>
 
-                <div class="jyotisham-astro-pdf-field">
-                    <label for="jyotisham_astro_pdf_place"><?php echo esc_html__('Birth Place', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
-                    <input type="text" id="jyotisham_astro_pdf_place" name="jyotisham_astro_pdf_place" autocomplete="off" placeholder="<?php echo esc_attr__('Search a place', 'synilogic-jyotisham-astro'); ?>" required />
-                </div>
+                    <div class="jyotisham-astro-pdf-field">
+                        <label for="jyotisham_astro_pdf_boy_place"><?php echo esc_html__('Boy Birth Place', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
+                        <input type="text" id="jyotisham_astro_pdf_boy_place" name="jyotisham_astro_pdf_boy_place" autocomplete="off" placeholder="<?php echo esc_attr__('Search boy birth place', 'synilogic-jyotisham-astro'); ?>" required />
+                    </div>
+
+                    <div class="jyotisham-astro-pdf-field">
+                        <label for="jyotisham_astro_pdf_girl_name"><?php echo esc_html__('Girl Name', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
+                        <input type="text" id="jyotisham_astro_pdf_girl_name" name="jyotisham_astro_pdf_girl_name" placeholder="<?php echo esc_attr__('Enter girl name', 'synilogic-jyotisham-astro'); ?>" required />
+                    </div>
+
+                    <div class="jyotisham-astro-pdf-field">
+                        <label for="jyotisham_astro_pdf_girl_dob"><?php echo esc_html__('Girl Birth Date', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
+                        <input type="date" id="jyotisham_astro_pdf_girl_dob" name="jyotisham_astro_pdf_girl_dob" required />
+                    </div>
+
+                    <div class="jyotisham-astro-pdf-field">
+                        <label for="jyotisham_astro_pdf_girl_tob"><?php echo esc_html__('Girl Birth Time', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
+                        <input type="time" id="jyotisham_astro_pdf_girl_tob" name="jyotisham_astro_pdf_girl_tob" required />
+                    </div>
+
+                    <div class="jyotisham-astro-pdf-field">
+                        <label for="jyotisham_astro_pdf_girl_place"><?php echo esc_html__('Girl Birth Place', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
+                        <input type="text" id="jyotisham_astro_pdf_girl_place" name="jyotisham_astro_pdf_girl_place" autocomplete="off" placeholder="<?php echo esc_attr__('Search girl birth place', 'synilogic-jyotisham-astro'); ?>" required />
+                    </div>
+                <?php else: ?>
+                    <div class="jyotisham-astro-pdf-field">
+                        <label for="jyotisham_astro_pdf_name"><?php echo esc_html__('Birth Name', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
+                        <input type="text" id="jyotisham_astro_pdf_name" name="jyotisham_astro_pdf_name" placeholder="Enter your name" required />
+                    </div>
+
+                    <div class="jyotisham-astro-pdf-field">
+                        <label for="jyotisham_astro_pdf_date"><?php echo esc_html__('Birth Date', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
+                        <input type="date" id="jyotisham_astro_pdf_date" name="jyotisham_astro_pdf_date" required />
+                    </div>
+
+                    <div class="jyotisham-astro-pdf-field">
+                        <label for="jyotisham_astro_pdf_time"><?php echo esc_html__('Birth Time', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
+                        <input type="time" id="jyotisham_astro_pdf_time" name="jyotisham_astro_pdf_time" required />
+                    </div>
+
+                    <div class="jyotisham-astro-pdf-field">
+                        <label for="jyotisham_astro_pdf_place"><?php echo esc_html__('Birth Place', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
+                        <input type="text" id="jyotisham_astro_pdf_place" name="jyotisham_astro_pdf_place" autocomplete="off" placeholder="<?php echo esc_attr__('Search a place', 'synilogic-jyotisham-astro'); ?>" required />
+                    </div>
+                <?php endif; ?>
 
                 <div class="jyotisham-astro-pdf-field">
                     <label for="jyotisham_astro_pdf_language"><?php echo esc_html__('Language', 'synilogic-jyotisham-astro'); ?> <span class="required">*</span></label>
@@ -121,10 +165,19 @@ class Jyotisham_Astro_PDF_Frontend {
                 </div>
             </div>
 
-            <input type="hidden" id="jyotisham_astro_pdf_latitude" name="jyotisham_astro_pdf_latitude" />
-            <input type="hidden" id="jyotisham_astro_pdf_longitude" name="jyotisham_astro_pdf_longitude" />
-            <input type="hidden" id="jyotisham_astro_pdf_timezone" name="jyotisham_astro_pdf_timezone" />
-            <input type="hidden" id="jyotisham_astro_pdf_place_name" name="jyotisham_astro_pdf_place_name" />
+            <?php if ($is_matching_report): ?>
+                <input type="hidden" id="jyotisham_astro_pdf_boy_lat" name="jyotisham_astro_pdf_boy_lat" />
+                <input type="hidden" id="jyotisham_astro_pdf_boy_lon" name="jyotisham_astro_pdf_boy_lon" />
+                <input type="hidden" id="jyotisham_astro_pdf_boy_tz" name="jyotisham_astro_pdf_boy_tz" />
+                <input type="hidden" id="jyotisham_astro_pdf_girl_lat" name="jyotisham_astro_pdf_girl_lat" />
+                <input type="hidden" id="jyotisham_astro_pdf_girl_lon" name="jyotisham_astro_pdf_girl_lon" />
+                <input type="hidden" id="jyotisham_astro_pdf_girl_tz" name="jyotisham_astro_pdf_girl_tz" />
+            <?php else: ?>
+                <input type="hidden" id="jyotisham_astro_pdf_latitude" name="jyotisham_astro_pdf_latitude" />
+                <input type="hidden" id="jyotisham_astro_pdf_longitude" name="jyotisham_astro_pdf_longitude" />
+                <input type="hidden" id="jyotisham_astro_pdf_timezone" name="jyotisham_astro_pdf_timezone" />
+                <input type="hidden" id="jyotisham_astro_pdf_place_name" name="jyotisham_astro_pdf_place_name" />
+            <?php endif; ?>
             <input type="hidden" name="jyotisham_astro_pdf_nonce" value="<?php echo esc_attr(wp_create_nonce('jyotisham_astro_pdf_add_to_cart')); ?>" />
             <input type="hidden" name="jyotisham_astro_pdf_report_type" value="<?php echo esc_attr($report_type); ?>" />
             <input type="hidden" name="jyotisham_astro_pdf_report_slug" value="<?php echo esc_attr($report_slug); ?>" />
