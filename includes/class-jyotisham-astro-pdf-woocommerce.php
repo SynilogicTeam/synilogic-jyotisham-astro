@@ -649,9 +649,74 @@ class Jyotisham_Astro_PDF_WooCommerce {
 
         $this->print_download_styles_once();
 
+        if ($this->is_matching_report_data($data)) {
+            $boy_rows = array(
+                __('Boy Name', 'synilogic-jyotisham-astro') => isset($data['boy_name']) ? $data['boy_name'] : '',
+                __('Boy Date', 'synilogic-jyotisham-astro') => isset($data['boy_dob']) ? $this->normalize_date_for_api($data['boy_dob']) : '',
+                __('Boy Time', 'synilogic-jyotisham-astro') => isset($data['boy_tob']) ? $data['boy_tob'] : '',
+                __('Boy Place', 'synilogic-jyotisham-astro') => isset($data['boy_place']) ? $data['boy_place'] : '',
+            );
+
+            $girl_rows = array(
+                __('Girl Name', 'synilogic-jyotisham-astro') => isset($data['girl_name']) ? $data['girl_name'] : '',
+                __('Girl Date', 'synilogic-jyotisham-astro') => isset($data['girl_dob']) ? $this->normalize_date_for_api($data['girl_dob']) : '',
+                __('Girl Time', 'synilogic-jyotisham-astro') => isset($data['girl_tob']) ? $data['girl_tob'] : '',
+                __('Girl Place', 'synilogic-jyotisham-astro') => isset($data['girl_place']) ? $data['girl_place'] : '',
+            );
+
+            $common_rows = array(
+                __('Language', 'synilogic-jyotisham-astro') => $this->format_language(isset($data['lang']) ? $data['lang'] : 'en'),
+                __('Chart Style', 'synilogic-jyotisham-astro') => $this->format_chart_style(isset($data['style']) ? $data['style'] : 'north'),
+            );
+
+            echo '<div class="jyotisham-astro-pdf-item-details">';
+            echo '<strong>' . esc_html__('Report Details', 'synilogic-jyotisham-astro') . '</strong>';
+
+            echo '<div class="jyotisham-astro-pdf-item-subtitle">' . esc_html__('Boy Details', 'synilogic-jyotisham-astro') . '</div>';
+            echo '<ul class="jyotisham-astro-pdf-item-grid">';
+            foreach ($boy_rows as $label => $value) {
+                if ($value === '') {
+                    continue;
+                }
+                echo '<li class="jyotisham-astro-pdf-item-row">';
+                echo '<span class="jyotisham-astro-pdf-item-label">' . esc_html($label) . '</span>';
+                echo '<span class="jyotisham-astro-pdf-item-value">' . esc_html($value) . '</span>';
+                echo '</li>';
+            }
+            echo '</ul>';
+
+            echo '<div class="jyotisham-astro-pdf-item-subtitle">' . esc_html__('Girl Details', 'synilogic-jyotisham-astro') . '</div>';
+            echo '<ul class="jyotisham-astro-pdf-item-grid">';
+            foreach ($girl_rows as $label => $value) {
+                if ($value === '') {
+                    continue;
+                }
+                echo '<li class="jyotisham-astro-pdf-item-row">';
+                echo '<span class="jyotisham-astro-pdf-item-label">' . esc_html($label) . '</span>';
+                echo '<span class="jyotisham-astro-pdf-item-value">' . esc_html($value) . '</span>';
+                echo '</li>';
+            }
+            echo '</ul>';
+
+            echo '<ul class="jyotisham-astro-pdf-item-grid">';
+            foreach ($common_rows as $label => $value) {
+                if ($value === '') {
+                    continue;
+                }
+                echo '<li class="jyotisham-astro-pdf-item-row">';
+                echo '<span class="jyotisham-astro-pdf-item-label">' . esc_html($label) . '</span>';
+                echo '<span class="jyotisham-astro-pdf-item-value">' . esc_html($value) . '</span>';
+                echo '</li>';
+            }
+            echo '</ul>';
+
+            echo '</div>';
+            return;
+        }
+
         $rows = array(
             __('Birth Name', 'synilogic-jyotisham-astro') => isset($data['name']) ? $data['name'] : '',
-            __('Birth Date', 'synilogic-jyotisham-astro') => isset($data['date']) ? $data['date'] : '',
+            __('Birth Date', 'synilogic-jyotisham-astro') => isset($data['date']) ? $this->normalize_date_for_api($data['date']) : '',
             __('Birth Time', 'synilogic-jyotisham-astro') => isset($data['time']) ? $data['time'] : '',
             __('Birth Place', 'synilogic-jyotisham-astro') => isset($data['place']) ? $data['place'] : '',
             __('Language', 'synilogic-jyotisham-astro') => $this->format_language(isset($data['lang']) ? $data['lang'] : 'en'),
@@ -688,6 +753,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
 
         $hidden_keys = array(
             'Astro PDF Report',
+            '_jyotisham_astro_pdf_report_type',
             'Birth Name',
             'Birth Date',
             'Birth Time',
@@ -695,6 +761,20 @@ class Jyotisham_Astro_PDF_WooCommerce {
             'Latitude',
             'Longitude',
             'Timezone',
+            'Boy Name',
+            'Boy Date',
+            'Boy Time',
+            'Boy Place',
+            'Boy Latitude',
+            'Boy Longitude',
+            'Boy Timezone',
+            'Girl Name',
+            'Girl Date',
+            'Girl Time',
+            'Girl Place',
+            'Girl Latitude',
+            'Girl Longitude',
+            'Girl Timezone',
             'Language',
             'Chart Style',
         );
@@ -1016,6 +1096,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
         echo '.jyotisham-astro-pdf-download-button:hover,.jyotisham-astro-pdf-download-button:focus{color:#fff !important;text-decoration:none !important;transform:none;box-shadow:0 14px 28px rgba(37,99,235,.24)}';
         echo '.jyotisham-astro-pdf-item-details{margin-top:8px;padding:10px 12px;border:1px solid #ececec;border-radius:10px;background:#fcfcfc}';
         echo '.jyotisham-astro-pdf-item-details strong{display:block;margin-bottom:8px;font-size:16px}';
+        echo '.jyotisham-astro-pdf-item-subtitle{margin:10px 0 8px;font-size:13px;font-weight:700;color:#1f2937}';
         echo '.jyotisham-astro-pdf-item-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px}';
         echo '.jyotisham-astro-pdf-item-row{display:flex;flex-direction:column;padding:8px 10px;border:1px solid #ededed;border-radius:8px;background:#fff}';
         echo '.jyotisham-astro-pdf-item-label{font-size:12px;font-weight:600;color:#6b7280;line-height:1.2;margin-bottom:4px}';
