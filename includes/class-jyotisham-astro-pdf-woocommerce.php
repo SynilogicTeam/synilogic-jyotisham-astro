@@ -123,6 +123,10 @@ class Jyotisham_Astro_PDF_WooCommerce {
             return;
         }
 
+        if (!isset($_POST['woocommerce_meta_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['woocommerce_meta_nonce'])), 'woocommerce_save_data')) {
+            return;
+        }
+
         $enabled = isset($_POST['_jyotisham_astro_pdf_enabled']) ? 'yes' : 'no';
 
         $report_type = isset($_POST['_jyotisham_astro_pdf_report_type'])
@@ -172,6 +176,11 @@ class Jyotisham_Astro_PDF_WooCommerce {
             return false;
         }
 
+        if (!isset($_POST['jyotisham_astro_pdf_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_nonce'])), 'jyotisham_astro_pdf_add_to_cart')) {
+            wc_add_notice(__('Please fill out the details before to buy the report.', 'synilogic-jyotisham-astro'), 'error');
+            return false;
+        }
+
         $data = $this->get_request_data();
         $is_matching = $this->is_matching_report_data($data);
 
@@ -182,11 +191,6 @@ class Jyotisham_Astro_PDF_WooCommerce {
 
         if ($is_matching && (empty($data['boy_name']) || empty($data['boy_dob']) || empty($data['boy_tob']) || empty($data['boy_place']) || empty($data['boy_lat']) || empty($data['boy_lon']) || empty($data['boy_tz']) || empty($data['girl_name']) || empty($data['girl_dob']) || empty($data['girl_tob']) || empty($data['girl_place']) || empty($data['girl_lat']) || empty($data['girl_lon']) || empty($data['girl_tz']) || empty($data['lang']) || empty($data['style']))) {
             wc_add_notice(__('Please fill out all boy and girl details before buying the matching report.', 'synilogic-jyotisham-astro'), 'error');
-            return false;
-        }
-
-        if (!isset($_POST['jyotisham_astro_pdf_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_nonce'])), 'jyotisham_astro_pdf_add_to_cart')) {
-            wc_add_notice(__('Security check failed. Please refresh the product page and try again.', 'synilogic-jyotisham-astro'), 'error');
             return false;
         }
 
@@ -272,6 +276,10 @@ class Jyotisham_Astro_PDF_WooCommerce {
             return $cart_item_data;
         }
 
+        if (!isset($_POST['jyotisham_astro_pdf_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_nonce'])), 'jyotisham_astro_pdf_add_to_cart')) {
+            return $cart_item_data;
+        }
+
         $data = $this->get_request_data();
         $is_matching = $this->is_matching_report_data($data);
 
@@ -349,6 +357,10 @@ class Jyotisham_Astro_PDF_WooCommerce {
             return;
         }
 
+        if (!isset($_POST['woocommerce-process-checkout-nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['woocommerce-process-checkout-nonce'])), 'woocommerce-process_checkout')) {
+            return;
+        }
+
         $has_report_product = false;
 
         foreach (WC()->cart->get_cart() as $cart_item) {
@@ -393,7 +405,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
             return;
         }
 
-        $message = esc_js(__('Cash on Delivery is not available for report products. Please choose an online payment method.', 'synilogic-jyotisham-astro'));
+        $message = __('Cash on Delivery is not available for report products. Please choose an online payment method.', 'synilogic-jyotisham-astro');
 
         echo '<script>';
         echo '(function(){';
@@ -401,7 +413,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
         echo 'function paymentWrap(){return document.querySelector(".wc_payment_methods")||document.querySelector(".wc-block-checkout__payment-method")||document.querySelector(".wc-block-components-radio-control-group")||document.querySelector(".wc-block-checkout__payment-methods");}';
         echo 'function placeOrderButtons(){return document.querySelectorAll("#place_order, form.checkout button[type=submit], .wc-block-components-checkout-place-order-button");}';
         echo 'function codSelected(){var selected=document.querySelector("input[name=\"payment_method\"]:checked");if(selected){return selected.value==="cod";}var cod=document.querySelector("input[type=\"radio\"][value=\"cod\"]");return !!(cod&&cod.checked);}';
-        echo 'function ensureNotice(){var wrap=paymentWrap();if(!wrap){return null;}var notice=document.getElementById(noticeId);if(!notice){notice=document.createElement("div");notice.id=noticeId;notice.className="woocommerce-error";notice.style.marginTop="10px";notice.textContent="' . $message . '";wrap.parentNode.insertBefore(notice,wrap.nextSibling);}return notice;}';
+        echo 'function ensureNotice(){var wrap=paymentWrap();if(!wrap){return null;}var notice=document.getElementById(noticeId);if(!notice){notice=document.createElement("div");notice.id=noticeId;notice.className="woocommerce-error";notice.style.marginTop="10px";notice.textContent="' . esc_js($message) . '";wrap.parentNode.insertBefore(notice,wrap.nextSibling);}return notice;}';
         echo 'function blockPlaceOrder(){var blocked=codSelected();var buttons=placeOrderButtons();for(var i=0;i<buttons.length;i++){var btn=buttons[i];if(!btn){continue;}btn.disabled=blocked;if(blocked){btn.setAttribute("aria-disabled","true");btn.classList.add("disabled");}else{btn.removeAttribute("aria-disabled");btn.classList.remove("disabled");}}}';
         echo 'function toggleNotice(){var notice=ensureNotice();if(notice){notice.style.display=codSelected()?"block":"none";}blockPlaceOrder();}';
         echo 'function preventSubmit(e){if(!codSelected()){return;}if(e&&typeof e.preventDefault==="function"){e.preventDefault();}if(e&&typeof e.stopPropagation==="function"){e.stopPropagation();}toggleNotice();var notice=document.getElementById(noticeId);if(notice&&typeof notice.scrollIntoView==="function"){notice.scrollIntoView({behavior:"smooth",block:"center"});}}';
@@ -500,6 +512,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
                 $item->add_meta_data('_jyotisham_astro_pdf_error', $result->get_error_message(), true);
                 $item->save();
                 $order->add_order_note(sprintf(
+                    /* translators: %s: API error message from the Astro PDF service. */
                     __('Astro PDF report generation failed: %s', 'synilogic-jyotisham-astro'),
                     $result->get_error_message()
                 ));
@@ -591,6 +604,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
 
         echo '<section class="jyotisham-astro-pdf-downloads">';
         if (count($download_reports) === 1 && !empty($report_name)) {
+            /* translators: %s: report name. */
             echo '<h2>' . esc_html(sprintf(__('Your report is ready (%s)', 'synilogic-jyotisham-astro'), $report_name)) . '</h2>';
         } else {
             echo '<h2>' . esc_html__('Your reports are ready', 'synilogic-jyotisham-astro') . '</h2>';
@@ -853,6 +867,36 @@ class Jyotisham_Astro_PDF_WooCommerce {
     }
 
     private function get_request_data() {
+        if (!isset($_POST['jyotisham_astro_pdf_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_nonce'])), 'jyotisham_astro_pdf_add_to_cart')) {
+            return array(
+                'name' => '',
+                'date' => '',
+                'time' => '',
+                'place' => '',
+                'latitude' => '',
+                'longitude' => '',
+                'timezone' => '',
+                'boy_name' => '',
+                'boy_dob' => '',
+                'boy_tob' => '',
+                'boy_place' => '',
+                'boy_lat' => '',
+                'boy_lon' => '',
+                'boy_tz' => '',
+                'girl_name' => '',
+                'girl_dob' => '',
+                'girl_tob' => '',
+                'girl_place' => '',
+                'girl_lat' => '',
+                'girl_lon' => '',
+                'girl_tz' => '',
+                'lang' => 'en',
+                'style' => 'north',
+                'report_type' => '',
+                'report_slug' => '',
+            );
+        }
+
         return array(
             'name' => isset($_POST['jyotisham_astro_pdf_name']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_name'])) : '',
             'date' => isset($_POST['jyotisham_astro_pdf_date']) ? sanitize_text_field(wp_unslash($_POST['jyotisham_astro_pdf_date'])) : '',
@@ -1185,6 +1229,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
         }
 
         $customer_name = trim((string) $order->get_billing_first_name());
+        /* translators: %s: order number. */
         $subject = sprintf(__('Your Astro PDF report is ready - Order #%s', 'synilogic-jyotisham-astro'), $order->get_order_number());
 
         $brand_name = get_bloginfo('name');
@@ -1202,11 +1247,13 @@ class Jyotisham_Astro_PDF_WooCommerce {
             $message .= '<img src="' . esc_url($logo_url) . '" alt="' . esc_attr($brand_name) . '" style="max-width:140px;height:auto;display:block;margin:0 auto 14px;">';
         }
         $message .= '<div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.82;margin-bottom:6px;">' . esc_html__('Report Ready', 'synilogic-jyotisham-astro') . '</div>';
+        /* translators: %s: order number. */
         $message .= '<h1 style="margin:0;font-size:30px;line-height:1.25;font-weight:800;color:#ffffff;">' . esc_html(sprintf(__('Your Astro PDF Report is Ready - Order #%s', 'synilogic-jyotisham-astro'), $order->get_order_number())) . '</h1>';
         $message .= '</td></tr>';
 
         $message .= '<tr><td style="padding:30px 32px 8px;color:#0f172a;font-size:16px;line-height:1.8;">';
         $message .= '<p style="margin:0 0 14px;">' . sprintf(
+            /* translators: %s: customer first name or the word Customer. */
             esc_html__('Dear %s,', 'synilogic-jyotisham-astro'),
             esc_html($customer_name !== '' ? $customer_name : __('Customer', 'synilogic-jyotisham-astro'))
         ) . '</p>';
@@ -1239,6 +1286,7 @@ class Jyotisham_Astro_PDF_WooCommerce {
                 if ($index === 0) {
                     continue;
                 }
+                /* translators: %s: report name. */
                 $extra_name = !empty($report['report_slug']) ? $this->format_report_name($report['report_slug']) : __('Download PDF', 'synilogic-jyotisham-astro');
                 $message .= '<div style="margin-bottom:8px;"><a href="' . esc_url($report['download_url']) . '" target="_blank" rel="noopener noreferrer" style="color:#0f172a;font-weight:600;text-decoration:none;">' . esc_html($extra_name) . '</a></div>';
             }

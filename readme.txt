@@ -1,5 +1,5 @@
 === Astro API By Synilogic ===
-Tags: astrology, horoscope, kundli, panchang, numerology, reports
+Tags: astrology, horoscope, kundli, panchang, numerology
 Requires at least: 5.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -7,7 +7,7 @@ Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Astro API By Synilogic connects your site to JyotishamAstro to deliver Kundli, Matching, Panchang and Numerology via shortcodes, plus paid WooCommerce Astro PDF Reports.
+Astro API By Synilogic connects to JyotishamAstro for Kundli, Matching, Panchang, Numerology, and paid WooCommerce Astro PDF reports.
 
 == Description ==
 Build rich astrological experiences with configurable forms, multilingual outputs, and Google Maps-based place lookup and timezone detection. The plugin is free; the Synilogic Astro API is a paid service. Get API access and plan details at https://www.jyotishamastroapi.com/.
