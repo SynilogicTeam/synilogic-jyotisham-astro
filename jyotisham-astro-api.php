@@ -3,7 +3,7 @@
  * Plugin Name: Astro API By Synilogic
  * Plugin URI: https://synilogic.in
  * Description: A comprehensive plugin using the hosted Astro API By Synilogic service to generate horoscope reports based on birth details.
- * Version: 1.0.4
+ * Version: 1.0.5
  * Author: Synilogic
  * Author URI: https://synilogic.in/
  * License: GPL v2 or later
@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
 // Define plugin constants
 define('JYOTISHAM_ASTRO_API_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('JYOTISHAM_ASTRO_API_PLUGIN_PATH', plugin_dir_path(__FILE__));
-define('JYOTISHAM_ASTRO_API_PLUGIN_VERSION', '1.0.4');
+define('JYOTISHAM_ASTRO_API_PLUGIN_VERSION', '1.0.5');
 
 // Include required files
 require_once JYOTISHAM_ASTRO_API_PLUGIN_PATH . 'includes/class-jyotisham-admin.php';
